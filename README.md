@@ -1,31 +1,45 @@
 # AutoInfra Doctor
 
-Fix broken MikroTik, Nginx, Docker, and infrastructure configs in seconds.
+Find and fix broken infrastructure configs in seconds.
 
-## 🚀 What it does
-- Detects misconfigurations
-- Explains real impact
-- Generates exact CLI fixes
-- Security auditing
-- Auto-fix mode
+## The Problem
 
-## ⚡ Usage
-```bash
-npx auto-infra-doctor analyze examples/mikrotik.rsc --mode full
+You paste a config.
+You debug for hours.
+Still broken.
+
+## The Solution
+
+AutoInfra Doctor tells you:
+- What is wrong
+- Why it matters
+- Exact fix commands
+
+## Example
+
+Input:
+```
+/ip firewall nat add chain=srcnat action=masquerade
+/ip firewall nat add chain=srcnat action=masquerade
 ```
 
-## 🧠 Example Output
+Output:
 ```
-[CRITICAL][Security] Open port detected
-[FIX] /ip firewall filter add chain=input action=drop
+[CRITICAL] Duplicate NAT rule
+[FIX] /ip firewall nat remove 1
 ```
 
-## 🛣 Roadmap
-- CLI MVP
-- AI Engine integration
-- Multi-config support
+## Usage
+
+```
+npx auto-infra-doctor analyze config.rsc --mode full
+```
+
+## Roadmap
+- CLI
+- AI engine
 - Web UI
-- SaaS platform
+- SaaS
 
-## 💡 Vision
-Become the "ChatGPT for infrastructure debugging"
+## Vision
+Make infrastructure debugging instant.
