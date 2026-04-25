@@ -1,0 +1,11 @@
+{
+  "name": "auto-infra-doctor",
+  "version": "1.0.0",
+  "bin": {
+    "auto-infra-doctor": "./bin/cli.js"
+  },
+  "type": "module",
+  "dependencies": {
+    "dotenv": "^16.4.0"
+  }
+}
