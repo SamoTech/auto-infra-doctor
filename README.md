@@ -220,7 +220,9 @@ The API handler is intentionally thin — it handles only HTTP concerns (rate li
 - [x] CLI via `npx auto-infra-doctor`
 - [x] Automated CI audit workflow
 - [x] npm registry publish ([`auto-infra-doctor`](https://www.npmjs.com/package/auto-infra-doctor))
-- [x] Security headers + rate limiting
+- [x] Security headers + rate limiting + CORS hardening
+- [x] Input validation (500 KB cap, type checks, sanitization)
+- [x] `src/engine.js` orchestrator — parallel rule execution
 - [ ] Expanded rules — 20+ checks across all categories
 - [ ] AI-enhanced analysis (GPT-4o-mini, opt-in via `OPENAI_API_KEY`)
 - [ ] Health score gauge in dashboard UI
@@ -244,10 +246,12 @@ AutoInfra Doctor is free and open-source. If it saves you debugging time or catc
 
 </div>
 
-**Sponsors receive:**
-- 🚀 Early access to Pro features
-- ⚡ Priority issue responses  
-- 📝 Name listed in CHANGELOG and README contributors section
+**What sponsors unlock:**
+
+- 🚀 Early access to Pro features before public release
+- ⚡ Priority responses on issues and feature requests
+- 📝 Name credited in CHANGELOG and README contributors section
+- 💬 Direct channel for roadmap input
 
 ---
 
@@ -283,7 +287,7 @@ See all [contributors →](https://github.com/SamoTech/auto-infra-doctor/graphs/
 
 ## 📄 License
 
-MIT © 2024–2026 [SamoTech](https://github.com/SamoTech)  
+MIT © 2026 [SamoTech](https://github.com/SamoTech)  
 See [LICENSE](LICENSE) for the full text.
 
 ---

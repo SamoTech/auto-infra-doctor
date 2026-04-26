@@ -16,6 +16,7 @@ This project follows [Semantic Versioning](https://semver.org/) and [Keep a Chan
 - GitHub Action: `auto-infra-doctor/scan@v1`
 - VSCode extension
 - Slack / webhook alert integration
+- Team API keys + usage dashboard
 
 ---
 
@@ -33,11 +34,15 @@ This project follows [Semantic Versioning](https://semver.org/) and [Keep a Chan
 - **Dead code removal** — deleted conflicting `src/analyzer.js`; `src/rules/mikrotik.js` is now the sole rule source
 - **Vercel Analytics** — performance and visitor telemetry added to dashboard
 - **Autonomous CI audit workflow** — `ai-autonomous.yml` runs on every push to `main`
+- **`.github/FUNDING.yml`** — GitHub Sponsors + Buy Me a Coffee sponsor button
+- **Full docs refactor** — `README.md`, `CONTRIBUTING.md`, `SECURITY.md`, `SUPPORT.md`, `CODE_OF_CONDUCT.md`, `CHANGELOG.md` rewritten for production quality
 
 ### Changed
 - `vercel.json` migrated from legacy `routes` format to modern `rewrites` + `headers` structure
 - API response now includes `score`, `summary`, and `analyzedAt` fields
 - Severity sorting applied to all issue arrays (CRITICAL → HIGH → MEDIUM → LOW)
+- `LICENSE` copyright year updated to 2026
+- Roadmap in `README.md` updated to reflect completed items
 
 ### Fixed
 - `localStorage` usage replaced with hash-based URL state to resolve silent failures in sandboxed iframe contexts

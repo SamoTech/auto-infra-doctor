@@ -2,57 +2,55 @@
 
 ## How to Get Help
 
-### 🐛 Found a bug?
+Autoinfrara Doctor is a free, open-source project maintained on a best-effort basis. Here are the best ways to get help:
 
-Open a [bug report](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=bug_report.md) on GitHub Issues.  
-Include the config snippet that caused the issue (redact sensitive values), your Node.js version, and the full error output.
+---
 
-### 💡 Have a feature request or idea?
+## 📖 Read the Docs First
 
-Start a [GitHub Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) — this is the best place for ideas, questions, and open-ended conversation.
-
-### 📖 Need help with usage?
-
-Check the documentation first:
-
-| Resource | Link |
+| Resource | What it covers |
 |---|---|
-| Web App | [auto-infra-doctor.vercel.app](https://auto-infra-doctor.vercel.app/) |
-| CLI Guide | [docs/CLI.md](docs/CLI.md) |
-| API Reference | [docs/API.md](docs/API.md) |
-| Rule Catalogue | [docs/RULES.md](docs/RULES.md) |
-| FAQ | [docs/FAQ.md](docs/FAQ.md) |
-
-### 🔐 Found a security vulnerability?
-
-Do **not** open a public issue. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
+| [docs/API.md](docs/API.md) | REST API — endpoints, request/response, error codes |
+| [docs/CLI.md](docs/CLI.md) | CLI flags, output formats, CI/CD integration |
+| [docs/RULES.md](docs/RULES.md) | Every detection rule — severity, logic, fix commands |
+| [CHANGELOG.md](CHANGELOG.md) | What changed in each version |
+| [README.md](README.md) | Quick start, architecture overview |
 
 ---
 
-## Community
+## 🐛 Found a Bug?
 
-- **GitHub Issues** — bugs and confirmed problems
-- **GitHub Discussions** — questions, ideas, general help
-- **r/mikrotik** — community discussion
-- **r/homelab** — homelab networking discussion
-
----
-
-## Response Times
-
-| Type | Expected response |
-|---|---|
-| Security vulnerability | Within 48 hours |
-| Bug report (with reproduction) | Within 5 business days |
-| Feature request | Best effort — reviewed in batches |
-| General question | Community-driven |
+1. Search [open issues](https://github.com/SamoTech/auto-infra-doctor/issues) — it may already be reported
+2. If not, [open a new issue](https://github.com/SamoTech/auto-infra-doctor/issues/new/choose) with:
+   - A minimal RouterOS config that reproduces the problem
+   - Expected vs. actual output
+   - Your Node.js version (`node --version`)
+   - Whether you're using the web app, CLI, or direct API
 
 ---
 
-## Sponsoring for Priority Support
+## 💡 Have a Feature Request?
 
-Sponsors via [GitHub Sponsors](https://github.com/sponsors/SamoTech) or [Buy Me a Coffee](https://buymeacoffee.com/samotech) receive priority responses on issues and feature requests.
+Open a [GitHub Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) or an Issue tagged `enhancement`. Describe the real-world scenario — the more context, the better.
 
 ---
 
-MIT © 2024–2026 [SamoTech](https://github.com/SamoTech)
+## 🔐 Security Issue?
+
+Do **not** post security vulnerabilities in public Issues. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
+
+---
+
+## 💬 Community
+
+- **GitHub Discussions** — [github.com/SamoTech/auto-infra-doctor/discussions](https://github.com/SamoTech/auto-infra-doctor/discussions) — general questions, ideas, show and tell
+- **Reddit** — [r/mikrotik](https://reddit.com/r/mikrotik) — community discussions about MikroTik configs
+
+---
+
+## 💖 Want Faster Support?
+
+Sponsors receive priority responses on issues and feature requests.
+
+[![GitHub Sponsors](https://img.shields.io/badge/Sponsor_on_GitHub-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors&logoColor=white)](https://github.com/sponsors/SamoTech)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://buymeacoffee.com/samotech)

@@ -1,6 +1,6 @@
 # Contributing to AutoInfra Doctor
 
-Thank you for your interest in contributing. AutoInfra Doctor is a community-driven project — every new detection rule represents a real-world misconfiguration caught before it became an incident.
+Thank you for taking the time to contribute! AutoInfra Doctor is an open-source tool built for the global MikroTik and DevOps community. Every contribution — whether a new detection rule, a bug fix, a doc improvement, or a feature suggestion — moves it forward.
 
 ---
 
@@ -10,183 +10,195 @@ Thank you for your interest in contributing. AutoInfra Doctor is a community-dri
 - [Ways to Contribute](#ways-to-contribute)
 - [Development Setup](#development-setup)
 - [Adding a Detection Rule](#adding-a-detection-rule)
+- [Project Structure](#project-structure)
 - [Commit Conventions](#commit-conventions)
 - [Pull Request Checklist](#pull-request-checklist)
 - [Reporting Bugs](#reporting-bugs)
-- [Security Vulnerabilities](#security-vulnerabilities)
+- [Suggesting Features](#suggesting-features)
 
 ---
 
 ## Code of Conduct
 
-This project follows our [Code of Conduct](CODE_OF_CONDUCT.md). By participating you agree to uphold it.
+This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to uphold it. Respectful, constructive collaboration only.
 
 ---
 
 ## Ways to Contribute
 
-| Contribution type | Where to start |
+| Type | Where to start |
 |---|---|
-| 🛡️ Add a detection rule | `src/rules/` — see guide below |
-| 🐛 Report a bug | [Open an issue](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=bug_report.md) |
-| 💡 Suggest a feature | [Open a discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) |
-| 📝 Improve documentation | Edit any file in `docs/` or root `.md` files |
-| 🌍 Add translations | See `docs/i18n/` (coming soon) |
-| ⭐ Star the repo | [github.com/SamoTech/auto-infra-doctor](https://github.com/SamoTech/auto-infra-doctor) |
+| 🐛 Bug fix | Open an issue first, then submit a PR |
+| 🔍 New detection rule | Add to `src/rules/` — see guide below |
+| 📖 Documentation | Edit any `.md` file or files in `docs/` |
+| 🎨 UI improvement | Edit `index.html` or files in `dashboard/` |
+| 🤖 AI layer | Improve `src/ai/heuristics.js` |
+| 💡 Feature request | Open a GitHub Discussion or Issue |
+| ⭐ Star the repo | Helps others discover the project |
 
 ---
 
 ## Development Setup
 
-### Prerequisites
-
-- Node.js ≥ 18
-- npm ≥ 9
-- Git
-
-### Clone and install
+**Requirements:** Node.js ≥ 18, npm ≥ 9
 
 ```bash
-git clone https://github.com/SamoTech/auto-infra-doctor.git
+# 1. Fork the repo on GitHub, then clone your fork
+git clone https://github.com/YOUR_USERNAME/auto-infra-doctor.git
 cd auto-infra-doctor
+
+# 2. Install dependencies
 npm install
-```
 
-### Run locally
+# 3. Run the test suite
+npm test
 
-```bash
-# Analyze a sample config
+# 4. Run the CLI against the example config
 node bin/cli.js analyze examples/mikrotik-broken.rsc
 
-# Run the API locally (requires Vercel CLI)
+# 5. Start a local Vercel dev server (optional)
 npx vercel dev
-
-# Run tests
-npm test
 ```
 
 ---
 
 ## Adding a Detection Rule
 
-This is the highest-impact contribution. Each rule catches a real category of misconfiguration.
+Adding a real-world misconfiguration rule is the single highest-impact contribution you can make.
 
-### Step 1 — Choose the right module
+### 1. Pick the right file
 
-| File | Domain |
+| File | Rule domain |
 |---|---|
-| `src/rules/mikrotik.js` | General RouterOS issues |
-| `src/rules/firewall.js` | Firewall chain and filter rules |
-| `src/rules/nat.js` | NAT, masquerade, hairpin |
-| `src/rules/routing.js` | Static routes, BGP, OSPF |
-| `src/rules/vpn.js` | IPSec, L2TP, WireGuard, SSTP |
+| `src/rules/mikrotik.js` | General RouterOS rules |
+| `src/rules/firewall.js` | Firewall filter chains |
+| `src/rules/nat.js` | NAT / masquerade |
+| `src/rules/routing.js` | BGP, OSPF, static routes |
+| `src/rules/vpn.js` | IPSec, L2TP, WireGuard |
 
-### Step 2 — Write the rule
+### 2. Rule shape
 
-Every rule must return an object with these fields:
+Every rule must return an object matching this shape:
 
-```javascript
+```js
 {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW',
-  message:  'Short description of what is wrong',
-  impact:   'What can go wrong as a result',
-  fix:      '/exact/routeros command to fix it'
+  message:  string,   // short, factual, < 80 chars
+  impact:   string,   // what goes wrong if ignored
+  fix:      string,   // exact RouterOS CLI command or clear instruction
+  source:   'rule'    // always 'rule' for deterministic checks
 }
 ```
 
-**Example:**
+### 3. Example rule
 
-```javascript
-// src/rules/firewall.js
-if (config.includes('upnp') && config.includes('enabled=yes')) {
+```js
+// In src/rules/firewall.js
+
+// SOCKS proxy enabled
+if (config.includes('socks') && config.includes('enabled=yes')) {
   issues.push({
-    severity: 'HIGH',
-    message:  'UPnP is enabled',
-    impact:   'LAN devices can open arbitrary external ports without authorization',
-    fix:      '/ip upnp set enabled=no'
+    severity: 'CRITICAL',
+    message:  'SOCKS proxy is enabled',
+    impact:   'Router can be used as an anonymous traffic tunnel',
+    fix:      '/ip socks set enabled=no',
+    source:   'rule',
   });
 }
 ```
 
-### Step 3 — Add a test case
+### 4. Add a test case
 
-Create or extend a test file in `tests/rules/` with a real config snippet that triggers your rule:
+Add a fixture in `tests/rules/` with a minimal config string that triggers your rule, and one that does not:
 
-```javascript
+```js
 // tests/rules/firewall.test.js
 import { runFirewallRules } from '../../src/rules/firewall.js';
 
-test('detects UPnP enabled', () => {
-  const config = '/ip upnp set enabled=yes';
+test('detects SOCKS proxy enabled', () => {
+  const config = '/ip socks\n  set enabled=yes';
   const issues = runFirewallRules(config);
-  expect(issues.some(i => i.message.includes('UPnP'))).toBe(true);
+  expect(issues.some(i => i.message.includes('SOCKS'))).toBe(true);
+});
+
+test('no false positive when SOCKS is disabled', () => {
+  const config = '/ip socks\n  set enabled=no';
+  const issues = runFirewallRules(config);
+  expect(issues.some(i => i.message.includes('SOCKS'))).toBe(false);
 });
 ```
 
-### Step 4 — Submit a PR
+---
 
-Describe in your PR:
-- What misconfiguration the rule detects
-- Why it matters in a real production environment
-- A link to any CVE, MikroTik advisory, or forum thread if applicable
+## Project Structure
+
+```
+auto-infra-doctor/
+├── api/analyze.js        ← Thin HTTP handler (Vercel serverless)
+├── src/
+│   ├── engine.js         ← Orchestrator
+│   ├── validator.js      ← Input validation
+│   ├── rules/            ← Detection rules (one file per domain)
+│   └── ai/               ← AI analysis layer
+├── bin/cli.js            ← CLI entry point
+├── dashboard/            ← Static frontend
+├── docs/                 ← API, CLI, and Rule reference docs
+├── examples/             ← Sample RouterOS configs
+└── tests/                ← Unit tests
+```
 
 ---
 
 ## Commit Conventions
 
-This project uses [Conventional Commits](https://www.conventionalcommits.org/):
+This project follows [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-type(scope): short description
-
-Optional longer body.
+feat: add UPnP detection rule
+fix: correct false positive in masquerade check
+docs: update CLI usage in README
+refactor: extract firewall rules into separate module
+test: add fixtures for VPN rule suite
+chore: bump Node.js engine requirement to 18
 ```
 
-| Type | When to use |
-|---|---|
-| `feat` | New feature or detection rule |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `refactor` | Code change with no behavior change |
-| `test` | Adding or updating tests |
-| `ci` | CI/CD workflow changes |
-| `chore` | Maintenance, dependency updates |
-
-**Examples:**
-
-```
-feat(rules): add UPnP detection to firewall module
-fix(api): return 405 for non-POST requests
-docs(readme): add CLI demo output section
-```
+Keep the subject line under 72 characters. Reference issues with `Closes #42` in the commit body when applicable.
 
 ---
 
 ## Pull Request Checklist
 
-Before opening a PR, confirm:
+Before submitting a PR, verify:
 
-- [ ] Branch is up to date with `main`
 - [ ] `npm test` passes with no failures
-- [ ] New rule has a corresponding test case in `tests/`
-- [ ] Rule object includes all four required fields: `severity`, `message`, `impact`, `fix`
+- [ ] New rules have both a positive and a negative test case
+- [ ] No `console.log` left in production paths
 - [ ] Commit messages follow Conventional Commits format
-- [ ] PR description explains the misconfiguration being detected
-- [ ] No unrelated changes included
+- [ ] PR description explains: what was changed, why, and how to test it
+- [ ] For new rules: the real-world scenario is described in the PR body
 
 ---
 
 ## Reporting Bugs
 
-Open an issue using the [bug report template](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=bug_report.md). Include:
-
-- The RouterOS config snippet that caused the problem (redact sensitive values)
-- Expected behavior vs. actual behavior
-- Node.js version and OS
-- Full error message or CLI output
+1. Search [existing issues](https://github.com/SamoTech/auto-infra-doctor/issues) first
+2. If new, open an issue with:
+   - A minimal RouterOS config that reproduces the problem
+   - Expected behaviour vs. actual behaviour
+   - Node.js version and OS
 
 ---
 
-## Security Vulnerabilities
+## Suggesting Features
 
-Do **not** open a public issue for security vulnerabilities. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
+Open a [GitHub Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) or an Issue tagged `enhancement`. Include:
+
+- The real-world scenario that motivates the feature
+- What the ideal output / behaviour looks like
+- Whether you'd be willing to implement it
+
+---
+
+<div align="center">
+  <sub>Thank you for making AutoInfra Doctor better for the entire MikroTik community. 🙏</sub>
+</div>
