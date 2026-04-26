@@ -1,37 +1,26 @@
+![Banner](assets/banner.svg)
+
+<p align="center">
+  <img src="assets/logo.svg" width="100"/>
+</p>
+
 # AutoInfra Doctor
 
 > Find and fix broken MikroTik configs in seconds.
 
 ---
 
-## Why this exists
+## ⚠️ The Reality
 
-Debugging RouterOS configs is slow and error‑prone.
-Small mistakes cause outages, open attack surface, or wasted CPU.
-
-AutoInfra Doctor turns configs into:
-- detected issues
-- real impact
-- exact CLI fixes
+Debugging RouterOS configs is slow and error-prone.
+One small mistake can break your network or expose it.
 
 ---
 
-## What you get
+## 🔥 Live Demo
 
-- Deterministic checks (works without AI)
-- CLI-ready fixes
-- Security flags (input chain, exposure)
-- Clear severity levels
-
----
-
-## Quick demo
-
-### Input (examples/mikrotik-broken.rsc)
-```
-/ip firewall filter add chain=input action=accept
-/ip firewall nat add chain=srcnat action=masquerade
-/ip firewall nat add chain=srcnat action=masquerade
+```bash
+npx auto-infra-doctor analyze examples/mikrotik-broken.rsc --mode full
 ```
 
 ### Output
@@ -45,53 +34,39 @@ AutoInfra Doctor turns configs into:
 
 ---
 
-## Install & run
+## ⚡ What You Get
 
-```
+- Real issue detection
+- Clear impact explanation
+- Exact CLI fixes
+- Security insights
+
+---
+
+## 🎯 Focus
+
+MikroTik first. Precision over hype.
+
+---
+
+## 🚀 Install
+
+```bash
 npm i -g auto-infra-doctor
-# or
-npx auto-infra-doctor analyze examples/mikrotik-broken.rsc --mode full
 ```
 
 ---
 
-## Supported (v1)
+## 🛣 Roadmap
 
-- MikroTik (RouterOS) — prioritized
-
-Planned:
-- Nginx
-- Docker
-- VPN / Cloudflare
-
----
-
-## Modes
-
-- diagnose
-- fix
-- security
-- optimize
-- autofix (planned)
-
----
-
-## Project status
-
-- [x] CLI scaffold
-- [x] MikroTik basic detections
-- [ ] AI engine (structured JSON)
-- [ ] Advanced RouterOS rules (queues, dstnat, fasttrack)
+- [x] CLI
+- [x] MikroTik detection
+- [ ] AI engine
+- [ ] Advanced analysis
 - [ ] Web UI
 
 ---
 
-## Contributing
+## ⭐ If This Saved You Time
 
-PRs with real-world configs are welcome. Add a broken config in `examples/` + expected output.
-
----
-
-## If this saves you time
-
-Star the repo and share with a network engineer who still debugs by hand.
+Star the repo.
