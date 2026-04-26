@@ -2,40 +2,42 @@
 
 ## How to Get Help
 
-### 🐛 Found a bug?
-
-Open a [GitHub Issue](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=bug_report.md). Include steps to reproduce and a sanitized config snippet if relevant.
-
-### 💡 Have a feature request?
-
-Open a [GitHub Issue](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=feature_request.md) describing the use case and why it matters.
-
-### ❓ General questions?
-
-Start a [GitHub Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions). This is the right place for:
-- "How do I use the API in CI/CD?"
-- "Why is my config flagged for X?"
-- "What does the health score mean?"
-
-### 📖 Documentation
-
-Before opening an issue, check the docs:
-
-| Guide | Link |
+| Channel | Use for |
 |---|---|
-| API reference | [docs/API.md](docs/API.md) |
-| CLI usage | [docs/CLI.md](docs/CLI.md) |
-| Rule catalogue | [docs/RULES.md](docs/RULES.md) |
-| Contributing | [CONTRIBUTING.md](CONTRIBUTING.md) |
-
-### 🔐 Security issue?
-
-Do **not** open a public issue. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
+| [GitHub Issues](https://github.com/SamoTech/auto-infra-doctor/issues) | Bug reports, incorrect rule detections |
+| [GitHub Discussions](https://github.com/SamoTech/auto-infra-doctor/discussions) | Questions, feature ideas, general usage help |
+| [docs/API.md](docs/API.md) | REST API reference |
+| [docs/CLI.md](docs/CLI.md) | CLI flags and usage |
+| [docs/RULES.md](docs/RULES.md) | Understanding why a rule fired |
 
 ---
 
-## Response Expectations
+## Before Opening an Issue
 
-This is an open-source project maintained in spare time. Response times are not guaranteed, but typical turnaround for issues is within a few days.
+1. Check the [existing issues](https://github.com/SamoTech/auto-infra-doctor/issues?q=is%3Aissue) — your problem may already be reported
+2. Read [docs/RULES.md](docs/RULES.md) — the rule may be intentional
+3. Verify you are on the latest version: `npx auto-infra-doctor --version`
 
-If you need faster support or have a commercial use case, consider [sponsoring the project](https://github.com/sponsors/SamoTech) — sponsors receive priority responses.
+---
+
+## Reporting a False Positive
+
+If AutoInfra Doctor flags something you believe is correctly configured, open an issue with:
+
+- The exact config line(s) that triggered the false positive
+- Why you believe it is a false positive
+- Your RouterOS version and use case context
+
+False positive reports are high-priority — they directly improve rule quality.
+
+---
+
+## Security Vulnerabilities
+
+For security issues, do **not** open a public issue. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
+
+---
+
+## Commercial Support
+
+Need help integrating AutoInfra Doctor into your infrastructure or CI/CD pipeline? [Open a Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) describing your use case.

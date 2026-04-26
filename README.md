@@ -8,6 +8,8 @@
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_App-auto--infra--doctor.vercel.app-01696f?style=for-the-badge&logo=vercel&logoColor=white)](https://auto-infra-doctor.vercel.app/)
+[![npm version](https://img.shields.io/npm/v/auto-infra-doctor?style=for-the-badge&logo=npm&logoColor=white&color=cc3534)](https://www.npmjs.com/package/auto-infra-doctor)
+[![npm downloads](https://img.shields.io/npm/dm/auto-infra-doctor?style=for-the-badge&logo=npm&logoColor=white&color=cc3534)](https://www.npmjs.com/package/auto-infra-doctor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 
@@ -29,6 +31,7 @@
   <p><strong>Instant MikroTik RouterOS config analysis.<br/>Find security holes, misconfigurations, and performance issues — in seconds.</strong></p>
   <p>
     <a href="https://auto-infra-doctor.vercel.app/">🌐 Live App</a> ·
+    <a href="https://www.npmjs.com/package/auto-infra-doctor">📦 npm</a> ·
     <a href="docs/API.md">📡 API Docs</a> ·
     <a href="docs/CLI.md">⚙️ CLI Docs</a> ·
     <a href="docs/RULES.md">📋 Rule Reference</a> ·
@@ -40,7 +43,7 @@
 
 ## ⚠️ The Problem
 
-Debugging RouterOS configurations is slow, manual, and error-prone. One bad firewall rule can expose your entire network. One missing NAT entry breaks connectivity for hundreds of users. MikroTik’s documentation is thorough — but it doesn’t tell you what’s *wrong* with **your specific config**.
+Debugging RouterOS configurations is slow, manual, and error-prone. One bad firewall rule can expose your entire network. One missing NAT entry breaks connectivity for hundreds of users. MikroTik's documentation is thorough — but it doesn't tell you what's *wrong* with **your specific config**.
 
 AutoInfra Doctor does exactly that. Paste your config, get a prioritized list of issues with exact CLI fixes — no account, no install, no noise.
 
@@ -52,21 +55,30 @@ AutoInfra Doctor does exactly that. Paste your config, get a prioritized list of
 
 Paste your config at **[auto-infra-doctor.vercel.app](https://auto-infra-doctor.vercel.app/)** and get results instantly.
 
-### ⚙️ CLI
-
-> **Note:** npm publish is in progress. Until the package is live on npm, clone and run locally:
+### ⚙️ CLI via npm
 
 ```bash
-# Clone and run directly
+# Run without installing (recommended for one-off use)
+npx auto-infra-doctor analyze /path/to/config.rsc
+
+# Install globally
+npm install -g auto-infra-doctor
+auto-infra-doctor analyze /path/to/config.rsc
+auto-infra-doctor analyze /path/to/config.rsc --mode full --format json
+
+# Short alias also available
+aid analyze /path/to/config.rsc
+```
+
+> **Note:** Requires Node.js ≥ 18. Published on npm as [`auto-infra-doctor`](https://www.npmjs.com/package/auto-infra-doctor).
+
+### 🔧 Run from Source
+
+```bash
 git clone https://github.com/SamoTech/auto-infra-doctor.git
 cd auto-infra-doctor
 npm install
 node bin/cli.js analyze examples/mikrotik-broken.rsc
-
-# Once published to npm:
-npx auto-infra-doctor analyze /path/to/config.rsc
-npm install -g auto-infra-doctor
-auto-infra-doctor analyze /path/to/config.rsc --mode full --format json
 ```
 
 ### 📡 REST API
@@ -200,7 +212,7 @@ The API handler is intentionally thin — it handles only HTTP concerns (rate li
 - [x] Web dashboard
 - [x] CLI (`npx auto-infra-doctor`)
 - [x] Automated CI audit workflow
-- [ ] Publish to npm registry
+- [x] Published to npm registry — [`auto-infra-doctor`](https://www.npmjs.com/package/auto-infra-doctor)
 - [ ] Expanded rules (20+ checks across all categories)
 - [ ] AI-enhanced analysis layer (GPT-4o-mini, opt-in)
 - [ ] Health score gauge in UI
@@ -232,7 +244,7 @@ AutoInfra Doctor is free and open-source. If it saves you debugging time, consid
 
 ## 🤝 Contributing
 
-Contributions are what make open-source great. The most impactful way to contribute is by **adding a new detection rule** — every real-world misconfiguration you’ve encountered is a candidate.
+Contributions are what make open-source great. The most impactful way to contribute is by **adding a new detection rule** — every real-world misconfiguration you've encountered is a candidate.
 
 ```bash
 git clone https://github.com/SamoTech/auto-infra-doctor.git
