@@ -41,7 +41,9 @@ ${truncated}
     });
     if (!res.ok) return [];
     const data = await res.json();
-    const parsed = JSON.parse(data.choices[0].message.content);
+    const choice = data?.choices?.[0]?.message?.content;
+    if (!choice) return [];
+    const parsed = JSON.parse(choice);
     return (parsed.issues || []).map(i => ({ ...i, source: 'ai' }));
   } catch {
     return [];

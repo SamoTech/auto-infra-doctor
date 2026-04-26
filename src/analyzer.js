@@ -1,20 +1,17 @@
-export async function analyzeConfig(config, mode) {
-  let issues = [];
-
-  // Detect duplicate masquerade rules
-  const natMatches = config.match(/masquerade/g) || [];
-  if (natMatches.length > 1) {
-    issues.push("[CRITICAL][Logic] Duplicate NAT masquerade rule detected\n[FIX] /ip firewall nat remove 1");
-  }
-
-  // Detect open input chain
-  if (config.includes("chain=input") && config.includes("accept")) {
-    issues.push("[HIGH][Security] Open input chain allows all traffic\n[FIX] Add drop rule for input chain");
-  }
-
-  if (issues.length === 0) {
-    return "[OK] No major issues detected";
-  }
-
-  return issues.join("\n\n");
+/**
+ * DEPRECATED — this file is no longer used.
+ *
+ * All analysis logic has been consolidated into:
+ *   src/engine.js        ← orchestrator
+ *   src/rules/mikrotik.js ← MikroTik firewall / security rules
+ *   src/ai/heuristics.js  ← pattern-based heuristic checks
+ *   src/ai/openai.js      ← optional OpenAI layer
+ *
+ * This file is kept for reference only and will be removed in v2.0.
+ */
+export function analyzeConfig() {
+  throw new Error(
+    '[auto-infra-doctor] analyzeConfig() is deprecated. '
+    + 'Import runFullAnalysis from src/engine.js instead.'
+  );
 }

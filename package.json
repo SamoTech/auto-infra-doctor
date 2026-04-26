@@ -1,8 +1,8 @@
 {
   "name": "auto-infra-doctor",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "MikroTik RouterOS config analyzer — detect security issues, misconfigurations, and performance problems",
-  "keywords": ["mikrotik", "routeros", "network", "security", "devops", "firewall"],
+  "keywords": ["mikrotik", "routeros", "network", "security", "devops", "firewall", "analyzer"],
   "homepage": "https://auto-infra-doctor.vercel.app",
   "repository": { "type": "git", "url": "https://github.com/SamoTech/auto-infra-doctor" },
   "license": "MIT",
@@ -10,5 +10,9 @@
   "engines": { "node": ">=18" },
   "bin": { "aid": "./bin/cli.js", "auto-infra-doctor": "./bin/cli.js" },
   "dependencies": { "dotenv": "^16.4.0" },
-  "scripts": { "dev": "vercel dev" }
+  "devDependencies": { "vitest": "^1.6.0" },
+  "scripts": {
+    "dev": "vercel dev",
+    "test": "vitest run"
+  }
 }

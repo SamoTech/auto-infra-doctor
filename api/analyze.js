@@ -1,14 +1,14 @@
 /**
  * POST /api/analyze
  * Accepts: { config: string }
- * Returns: { issues, score, summary, analyzedAt }
+ * Returns: { issues, score, summary, analyzedAt, issueCount }
  */
 import { runFullAnalysis } from '../src/engine.js';
 import { validateConfig } from '../src/validator.js';
 
-// In-memory rate limiter (per Vercel instance — use Upstash Redis for multi-instance)
+// In-memory rate limiter (per Vercel instance — use Upstash Redis for multi-instance production)
 const RATE_MAP = new Map();
-const RATE_LIMIT = 10;     // requests
+const RATE_LIMIT = 10;      // requests
 const RATE_WINDOW = 60_000; // ms
 
 const ALLOWED_ORIGINS = [
@@ -35,6 +35,12 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
+  // Content-Type check FIRST (before touching body)
+  const ct = req.headers['content-type'] || '';
+  if (!ct.includes('application/json')) {
+    return res.status(415).json({ error: 'Content-Type must be application/json' });
+  }
+
   // Rate limiting
   const ip = (req.headers['x-forwarded-for'] || 'unknown').split(',')[0].trim();
   const now = Date.now();
@@ -51,12 +57,6 @@ export default async function handler(req, res) {
   const validationError = validateConfig(config);
   if (validationError) {
     return res.status(400).json({ error: validationError });
-  }
-
-  // Content-Type check
-  const ct = req.headers['content-type'] || '';
-  if (!ct.includes('application/json')) {
-    return res.status(415).json({ error: 'Content-Type must be application/json' });
   }
 
   try {
