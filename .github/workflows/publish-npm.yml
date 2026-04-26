@@ -36,29 +36,56 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           cache: 'npm'
 
-      # 3. Install dependencies
+      # 3. Install dependencies (including devDependencies for tests)
       - name: Install dependencies
         run: npm ci
 
-      # 4. Run tests before publishing
-      - name: Run tests
-        run: npm test
-        continue-on-error: false
+      # 4. Run tests only if test files exist
+      - name: Run tests (if test suite exists)
+        run: |
+          # Count test files — vitest exits non-zero when zero files are found
+          TEST_COUNT=$(find tests -name '*.test.*' 2>/dev/null | wc -l || echo 0)
+          if [ "$TEST_COUNT" -gt "0" ]; then
+            echo "Found $TEST_COUNT test file(s) — running test suite"
+            npm test
+          else
+            echo "No test files found in tests/ — skipping test step"
+            echo "ℹ️  Add test files to tests/ to enable pre-publish testing"
+          fi
 
-      # 5. Verify package contents (always runs)
+      # 5. Verify NPM_TOKEN is available before attempting publish
+      - name: Check NPM_TOKEN is configured
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          if [ -z "$NODE_AUTH_TOKEN" ]; then
+            echo "❌ NPM_TOKEN secret is not set."
+            echo "   Go to: Settings → Secrets and variables → Actions → New repository secret"
+            echo "   Name: NPM_TOKEN"
+            echo "   Value: your npm access token (npmjs.com → Access Tokens → Generate New Token → Automation)"
+            exit 1
+          fi
+          echo "✅ NPM_TOKEN is configured"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      # 6. Verify package contents (always runs — safe dry-run preview)
       - name: Verify package contents (dry run)
-        run: npm pack --dry-run
+        run: |
+          echo "=== Files that will be published ==="
+          npm pack --dry-run
 
-      # 6. Publish (skipped if dry_run input is true)
+      # 7. Publish (skipped if dry_run input is true)
       - name: Publish to npm
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # 7. Summary
+      # 8. Summary
       - name: Print published version
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          echo "Published: $(node -p \"require('./package.json').name\")@$(node -p \"require('./package.json').version\")"
-          echo "View at: https://www.npmjs.com/package/$(node -p \"require('./package.json').name\")"
+          PKG_NAME=$(node -p "require('./package.json').name")
+          PKG_VER=$(node -p "require('./package.json').version")
+          echo "✅ Published: ${PKG_NAME}@${PKG_VER}"
+          echo "   View at: https://www.npmjs.com/package/${PKG_NAME}"

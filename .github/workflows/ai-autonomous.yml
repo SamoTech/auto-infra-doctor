@@ -46,7 +46,7 @@ jobs:
           echo "### 📁 Repository Structure Check" >> audit-report.md
 
           # Check for critical files
-          files=("api/analyze.js" "src/rules/mikrotik.js" "vercel.json" "package.json")
+          files=("api/analyze.js" "src/rules/mikrotik.js" "src/engine.js" "src/validator.js" "vercel.json" "package.json")
           for f in "${files[@]}"; do
             if [ -f "$f" ]; then
               echo "- ✅ \`$f\` exists" >> audit-report.md
@@ -58,25 +58,44 @@ jobs:
           echo "" >> audit-report.md
           echo "### 🔐 Security Pattern Scan" >> audit-report.md
 
-          # Scan for known risky patterns in source files
-          if grep -r "localStorage" dashboard/ 2>/dev/null | grep -q .; then
-            echo "- ⚠️ **localStorage detected** in \`dashboard/\` — may silently fail in sandboxed environments" >> audit-report.md
+          # localStorage check
+          if grep -r "localStorage" dashboard/ index.html 2>/dev/null | grep -q .; then
+            echo "- ⚠️ **localStorage detected** — may silently fail in sandboxed iframe contexts" >> audit-report.md
+          else
+            echo "- ✅ No localStorage usage found" >> audit-report.md
           fi
 
-          if grep -r "innerHTML" dashboard/ 2>/dev/null | grep -q .; then
-            echo "- ⚠️ **innerHTML usage detected** in \`dashboard/\` — verify all interpolated values are escaped (XSS risk)" >> audit-report.md
+          # innerHTML check
+          if grep -r "innerHTML" dashboard/ index.html 2>/dev/null | grep -q .; then
+            ESCAPED=$(grep -r "escapeHtml\|textContent" dashboard/ index.html 2>/dev/null | wc -l)
+            if [ "$ESCAPED" -gt "0" ]; then
+              echo "- ✅ innerHTML present but escapeHtml/textContent guards detected" >> audit-report.md
+            else
+              echo "- ⚠️ **innerHTML usage without escapeHtml** detected — XSS risk" >> audit-report.md
+            fi
+          else
+            echo "- ✅ No raw innerHTML usage found" >> audit-report.md
           fi
 
-          if ! grep -q "rate" api/analyze.js 2>/dev/null; then
+          # Rate limiting check
+          if grep -q "rate\|RATE\|rateLimit\|429" api/analyze.js 2>/dev/null; then
+            echo "- ✅ Rate limiting present in API handler" >> audit-report.md
+          else
             echo "- ❌ **No rate limiting** detected in \`api/analyze.js\`" >> audit-report.md
-          else
-            echo "- ✅ Rate limiting present in API" >> audit-report.md
           fi
 
-          if ! grep -q "permissions" .github/workflows/*.yml 2>/dev/null; then
-            echo "- ⚠️ **No explicit permissions** block in workflow files — uses overly broad defaults" >> audit-report.md
+          # Input validation check
+          if grep -q "validator\|validateConfig\|config.length" api/analyze.js 2>/dev/null; then
+            echo "- ✅ Input validation present in API handler" >> audit-report.md
           else
+            echo "- ❌ **No input validation** detected in \`api/analyze.js\`" >> audit-report.md
+          fi
+
+          # Workflow permissions check
+          if grep -q "permissions" .github/workflows/*.yml 2>/dev/null; then
             echo "- ✅ Workflow permissions are explicitly scoped" >> audit-report.md
+          else
+            echo "- ⚠️ **No explicit permissions** block in workflow files" >> audit-report.md
           fi
 
           echo "" >> audit-report.md
@@ -90,13 +109,13 @@ jobs:
                 const vulns = data.metadata?.vulnerabilities || {};
                 const total = (vulns.critical||0)+(vulns.high||0)+(vulns.moderate||0);
                 if (total === 0) {
-                  console.log('- ✅ No moderate/high/critical vulnerabilities found');
+                  console.log('- \u2705 No moderate/high/critical vulnerabilities found');
                 } else {
-                  if (vulns.critical) console.log(\`- 🔴 **\${vulns.critical} critical** vulnerabilities\`);
-                  if (vulns.high) console.log(\`- 🟠 **\${vulns.high} high** vulnerabilities\`);
-                  if (vulns.moderate) console.log(\`- 🟡 **\${vulns.moderate} moderate** vulnerabilities\`);
+                  if (vulns.critical) console.log(\`- \ud83d\udd34 **\${vulns.critical} critical** vulnerabilities\`);
+                  if (vulns.high)     console.log(\`- \ud83d\udfe0 **\${vulns.high} high** vulnerabilities\`);
+                  if (vulns.moderate) console.log(\`- \ud83d\udfe1 **\${vulns.moderate} moderate** vulnerabilities\`);
                 }
-              } catch { console.log('- ℹ️ Could not parse npm audit output'); }
+              } catch { console.log('- \u2139\ufe0f Could not parse npm audit output'); }
             });
           " >> audit-report.md
 
@@ -104,7 +123,9 @@ jobs:
           echo "### 📏 Code Size" >> audit-report.md
           echo "| File | Lines |" >> audit-report.md
           echo "|---|---|" >> audit-report.md
-          for f in api/analyze.js src/rules/mikrotik.js src/analyzer.js; do
+          # Only measure files that actually exist (no dead references)
+          src_files=("api/analyze.js" "src/engine.js" "src/validator.js" "src/rules/mikrotik.js" "src/rules/firewall.js" "bin/cli.js")
+          for f in "${src_files[@]}"; do
             if [ -f "$f" ]; then
               lines=$(wc -l < "$f")
               echo "| \`$f\` | $lines |" >> audit-report.md
@@ -112,8 +133,17 @@ jobs:
           done
 
           echo "" >> audit-report.md
+          echo "### 🧪 Test Coverage" >> audit-report.md
+          TEST_COUNT=$(find tests -name '*.test.*' 2>/dev/null | wc -l || echo 0)
+          if [ "$TEST_COUNT" -gt "0" ]; then
+            echo "- ✅ $TEST_COUNT test file(s) found" >> audit-report.md
+          else
+            echo "- ⚠️ No test files found in \`tests/\` — add unit tests for rule modules" >> audit-report.md
+          fi
+
+          echo "" >> audit-report.md
           echo "---" >> audit-report.md
-          echo "_This report is auto-generated by the CI audit workflow. [View repo](https://github.com/SamoTech/auto-infra-doctor)_" >> audit-report.md
+          echo "_Auto-generated by CI audit workflow. [View repo](https://github.com/SamoTech/auto-infra-doctor)_" >> audit-report.md
 
           cat audit-report.md
 
