@@ -1,6 +1,6 @@
 # Contributing to AutoInfra Doctor
 
-Thank you for taking the time to contribute. AutoInfra Doctor is community-driven — the best improvements come from engineers who have seen real-world MikroTik misconfigurations in production.
+Thank you for your interest in contributing. AutoInfra Doctor is a community-driven project — every new detection rule represents a real-world misconfiguration caught before it became an incident.
 
 ---
 
@@ -13,104 +13,122 @@ Thank you for taking the time to contribute. AutoInfra Doctor is community-drive
 - [Commit Conventions](#commit-conventions)
 - [Pull Request Checklist](#pull-request-checklist)
 - [Reporting Bugs](#reporting-bugs)
-- [Suggesting Features](#suggesting-features)
+- [Security Vulnerabilities](#security-vulnerabilities)
 
 ---
 
 ## Code of Conduct
 
-This project follows the [Contributor Covenant Code of Conduct](CODE_OF_CONDUCT.md). By participating, you agree to uphold these standards. Violations can be reported to the maintainers.
+This project follows our [Code of Conduct](CODE_OF_CONDUCT.md). By participating you agree to uphold it.
 
 ---
 
 ## Ways to Contribute
 
-| Type | How |
+| Contribution type | Where to start |
 |---|---|
-| 🐛 Bug fix | Open an issue, then a PR with `fix:` prefix |
-| ✨ New rule | Add to the appropriate `src/rules/*.js` file + test |
-| 📖 Docs | Improve any `.md` file or `docs/` content |
-| 🧪 Tests | Expand coverage in `tests/` with real-world configs |
-| 🌍 Translation | Help translate the UI or docs (open an issue first) |
-| 💡 Feature | Open a Discussion or issue before implementing |
+| 🛡️ Add a detection rule | `src/rules/` — see guide below |
+| 🐛 Report a bug | [Open an issue](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=bug_report.md) |
+| 💡 Suggest a feature | [Open a discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) |
+| 📝 Improve documentation | Edit any file in `docs/` or root `.md` files |
+| 🌍 Add translations | See `docs/i18n/` (coming soon) |
+| ⭐ Star the repo | [github.com/SamoTech/auto-infra-doctor](https://github.com/SamoTech/auto-infra-doctor) |
 
 ---
 
 ## Development Setup
 
-**Requirements:** Node.js ≥ 18, npm ≥ 9
+### Prerequisites
+
+- Node.js ≥ 18
+- npm ≥ 9
+- Git
+
+### Clone and install
 
 ```bash
-# 1. Fork the repo on GitHub, then clone your fork
-git clone https://github.com/<your-username>/auto-infra-doctor.git
+git clone https://github.com/SamoTech/auto-infra-doctor.git
 cd auto-infra-doctor
-
-# 2. Install dependencies
 npm install
+```
 
-# 3. Run tests
-npm test
+### Run locally
 
-# 4. Start local dev server (requires Vercel CLI)
-npm run dev
-
-# 5. Test the CLI directly
+```bash
+# Analyze a sample config
 node bin/cli.js analyze examples/mikrotik-broken.rsc
+
+# Run the API locally (requires Vercel CLI)
+npx vercel dev
+
+# Run tests
+npm test
 ```
 
 ---
 
 ## Adding a Detection Rule
 
-This is the highest-impact contribution. Each rule maps a real-world misconfiguration to a fix.
+This is the highest-impact contribution. Each rule catches a real category of misconfiguration.
 
-### Step 1 — Choose the right file
+### Step 1 — Choose the right module
 
-| File | Add rules for |
+| File | Domain |
 |---|---|
 | `src/rules/mikrotik.js` | General RouterOS issues |
-| `src/rules/firewall.js` | `/ip firewall filter` and `/ip firewall mangle` |
-| `src/rules/nat.js` | `/ip firewall nat` |
-| `src/rules/routing.js` | `/ip route`, BGP, OSPF |
-| `src/rules/vpn.js` | IPSec, L2TP, SSTP, WireGuard |
+| `src/rules/firewall.js` | Firewall chain and filter rules |
+| `src/rules/nat.js` | NAT, masquerade, hairpin |
+| `src/rules/routing.js` | Static routes, BGP, OSPF |
+| `src/rules/vpn.js` | IPSec, L2TP, WireGuard, SSTP |
 
-### Step 2 — Follow the rule schema
+### Step 2 — Write the rule
+
+Every rule must return an object with these fields:
 
 ```javascript
-// Every rule must return an object with these exact fields
 {
   severity: 'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW',
-  message:  'Short description of the problem (< 80 chars)',
-  impact:   'What can go wrong if this is not fixed',
-  fix:      'Exact RouterOS CLI command to resolve this',
-  // Optional:
-  docs:     'https://wiki.mikrotik.com/...',
-  source:   'rule' // or 'ai'
+  message:  'Short description of what is wrong',
+  impact:   'What can go wrong as a result',
+  fix:      '/exact/routeros command to fix it'
 }
 ```
 
-### Step 3 — Write a test
+**Example:**
 
-Add a test in `tests/rules/` using a minimal config snippet that triggers your rule:
+```javascript
+// src/rules/firewall.js
+if (config.includes('upnp') && config.includes('enabled=yes')) {
+  issues.push({
+    severity: 'HIGH',
+    message:  'UPnP is enabled',
+    impact:   'LAN devices can open arbitrary external ports without authorization',
+    fix:      '/ip upnp set enabled=no'
+  });
+}
+```
+
+### Step 3 — Add a test case
+
+Create or extend a test file in `tests/rules/` with a real config snippet that triggers your rule:
 
 ```javascript
 // tests/rules/firewall.test.js
-import { describe, it, expect } from 'vitest';
 import { runFirewallRules } from '../../src/rules/firewall.js';
 
-describe('firewall rules', () => {
-  it('detects SOCKS proxy enabled', () => {
-    const config = '/ip socks set enabled=yes';
-    const issues = runFirewallRules(config);
-    expect(issues.some(i => i.message.includes('SOCKS'))).toBe(true);
-    expect(issues.find(i => i.message.includes('SOCKS')).severity).toBe('CRITICAL');
-  });
+test('detects UPnP enabled', () => {
+  const config = '/ip upnp set enabled=yes';
+  const issues = runFirewallRules(config);
+  expect(issues.some(i => i.message.includes('UPnP'))).toBe(true);
 });
 ```
 
-### Step 4 — Document your rule
+### Step 4 — Submit a PR
 
-Add an entry to `docs/RULES.md` in the correct category table.
+Describe in your PR:
+- What misconfiguration the rule detects
+- Why it matters in a real production environment
+- A link to any CVE, MikroTik advisory, or forum thread if applicable
 
 ---
 
@@ -119,45 +137,56 @@ Add an entry to `docs/RULES.md` in the correct category table.
 This project uses [Conventional Commits](https://www.conventionalcommits.org/):
 
 ```
-feat: add UPnP exposure detection rule
-fix: correct SOCKS proxy regex pattern
-docs: update CLI.md with --format flag
-test: add NAT masquerade test cases
-chore: bump vitest to 2.0
-refactor: extract engine orchestrator from api handler
+type(scope): short description
+
+Optional longer body.
 ```
 
-**Scope examples:** `rule`, `api`, `cli`, `ui`, `docs`, `ci`, `deps`
+| Type | When to use |
+|---|---|
+| `feat` | New feature or detection rule |
+| `fix` | Bug fix |
+| `docs` | Documentation only |
+| `refactor` | Code change with no behavior change |
+| `test` | Adding or updating tests |
+| `ci` | CI/CD workflow changes |
+| `chore` | Maintenance, dependency updates |
+
+**Examples:**
+
+```
+feat(rules): add UPnP detection to firewall module
+fix(api): return 405 for non-POST requests
+docs(readme): add CLI demo output section
+```
 
 ---
 
 ## Pull Request Checklist
 
-Before submitting, verify:
+Before opening a PR, confirm:
 
+- [ ] Branch is up to date with `main`
 - [ ] `npm test` passes with no failures
-- [ ] New rule has a corresponding test
-- [ ] New rule is documented in `docs/RULES.md`
-- [ ] Commit messages follow Conventional Commits
-- [ ] PR description explains the misconfiguration and real-world impact
-- [ ] No secrets, credentials, or personal data in any committed file
+- [ ] New rule has a corresponding test case in `tests/`
+- [ ] Rule object includes all four required fields: `severity`, `message`, `impact`, `fix`
+- [ ] Commit messages follow Conventional Commits format
+- [ ] PR description explains the misconfiguration being detected
+- [ ] No unrelated changes included
 
 ---
 
 ## Reporting Bugs
 
-Use the [Bug Report template](.github/ISSUE_TEMPLATE/bug_report.md). Include:
+Open an issue using the [bug report template](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=bug_report.md). Include:
 
-- A minimal config snippet that triggers the issue (sanitize any real credentials)
-- Expected behaviour vs. actual behaviour
+- The RouterOS config snippet that caused the problem (redact sensitive values)
+- Expected behavior vs. actual behavior
 - Node.js version and OS
+- Full error message or CLI output
 
 ---
 
-## Suggesting Features
+## Security Vulnerabilities
 
-Open a [Feature Request](.github/ISSUE_TEMPLATE/feature_request.md) or start a [GitHub Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions). For large changes, discuss first before implementing — this saves everyone time.
-
----
-
-*Thanks for making AutoInfra Doctor better for the entire MikroTik community.*
+Do **not** open a public issue for security vulnerabilities. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.

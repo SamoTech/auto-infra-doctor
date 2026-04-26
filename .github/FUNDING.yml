@@ -1,6 +1,8 @@
-# AutoInfra Doctor — Funding
-# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
+# AutoInfra Doctor — Funding configuration
+# Displayed as the "Sponsor" button on the GitHub repository page.
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/displaying-a-sponsor-button-in-your-repository
 
 github: [SamoTech]
+buy_me_a_coffee: samotech
 custom:
   - https://buymeacoffee.com/samotech

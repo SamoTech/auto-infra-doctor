@@ -1,6 +1,6 @@
 <!-- Banner -->
 <div align="center">
-  <img src="assets/banner.svg" alt="AutoInfra Doctor Banner" width="100%" />
+  <img src="assets/banner.svg" alt="AutoInfra Doctor" width="100%" />
 </div>
 
 <br/>
@@ -17,7 +17,7 @@
 [![GitHub Forks](https://img.shields.io/github/forks/SamoTech/auto-infra-doctor?style=for-the-badge&logo=github)](https://github.com/SamoTech/auto-infra-doctor/network/members)
 [![GitHub Issues](https://img.shields.io/github/issues/SamoTech/auto-infra-doctor?style=for-the-badge&logo=github)](https://github.com/SamoTech/auto-infra-doctor/issues)
 [![GitHub PRs](https://img.shields.io/github/issues-pr/SamoTech/auto-infra-doctor?style=for-the-badge&logo=github)](https://github.com/SamoTech/auto-infra-doctor/pulls)
-[![CI Audit](https://img.shields.io/github/actions/workflow/status/SamoTech/auto-infra-doctor/ai-autonomous.yml?label=CI+Audit&style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/SamoTech/auto-infra-doctor/actions/workflows/ai-autonomous.yml)
+[![CI Audit](https://img.shields.io/github/actions/workflow/status/SamoTech/auto-infra-doctor/ai-autonomous.yml?label=CI+Audit&style=for-the-badge&logo=github-actions&logoColor=white)](https://github.com/SamoTech/auto-infra-doctor/actions)
 [![Deployed on Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](CONTRIBUTING.md)
 [![Sponsor](https://img.shields.io/badge/Sponsor-%E2%9D%A4-ea4aaa?style=for-the-badge&logo=github-sponsors&logoColor=white)](https://github.com/sponsors/SamoTech)
@@ -35,7 +35,8 @@
     <a href="docs/API.md">📡 API Docs</a> ·
     <a href="docs/CLI.md">⚙️ CLI Docs</a> ·
     <a href="docs/RULES.md">📋 Rule Reference</a> ·
-    <a href="CHANGELOG.md">📝 Changelog</a>
+    <a href="CHANGELOG.md">📝 Changelog</a> ·
+    <a href="https://github.com/sponsors/SamoTech">💖 Sponsor</a>
   </p>
 </div>
 
@@ -43,34 +44,35 @@
 
 ## ⚠️ The Problem
 
-Debugging RouterOS configurations is slow, manual, and error-prone. One bad firewall rule can expose your entire network. One missing NAT entry breaks connectivity for hundreds of users. MikroTik's documentation is thorough — but it doesn't tell you what's *wrong* with **your specific config**.
+Debugging RouterOS configurations is slow, manual, and error-prone. One misconfigured firewall chain exposes your entire network. One missing NAT entry breaks connectivity for hundreds of users. MikroTik's documentation is thorough — but it doesn't tell you what's *wrong* with **your specific config**.
 
-AutoInfra Doctor does exactly that. Paste your config, get a prioritized list of issues with exact CLI fixes — no account, no install, no noise.
+AutoInfra Doctor does exactly that. Paste your config, get a prioritized list of issues with exact CLI fix commands — no account required, no install needed, no noise.
 
 ---
 
 ## 🚀 Quick Start
 
-### 🌐 Web App — No Install Needed
+### 🌐 Web App — Zero Install
 
-Paste your config at **[auto-infra-doctor.vercel.app](https://auto-infra-doctor.vercel.app/)** and get results instantly.
+Go to **[auto-infra-doctor.vercel.app](https://auto-infra-doctor.vercel.app/)**, paste your RouterOS export, and get results instantly.
 
 ### ⚙️ CLI via npm
 
 ```bash
-# Run without installing (recommended for one-off use)
+# Run instantly without installing (recommended)
 npx auto-infra-doctor analyze /path/to/config.rsc
 
-# Install globally
+# Install globally for repeated use
 npm install -g auto-infra-doctor
-auto-infra-doctor analyze /path/to/config.rsc
-auto-infra-doctor analyze /path/to/config.rsc --mode full --format json
+auto-infra-doctor analyze config.rsc
+auto-infra-doctor analyze config.rsc --mode full --format json
 
-# Short alias also available
-aid analyze /path/to/config.rsc
+# Short alias
+aid analyze config.rsc
 ```
 
-> **Note:** Requires Node.js ≥ 18. Published on npm as [`auto-infra-doctor`](https://www.npmjs.com/package/auto-infra-doctor).
+> **Requirements:** Node.js ≥ 18.  
+> **npm package:** [`auto-infra-doctor`](https://www.npmjs.com/package/auto-infra-doctor)
 
 ### 🔧 Run from Source
 
@@ -107,9 +109,11 @@ curl -X POST https://auto-infra-doctor.vercel.app/api/analyze \
 }
 ```
 
+See the full [API Reference →](docs/API.md)
+
 ---
 
-## 🔥 CLI Demo Output
+## 🔥 CLI Demo
 
 ```
 ╔══════════════════════════════════════════════╗
@@ -124,12 +128,12 @@ curl -X POST https://auto-infra-doctor.vercel.app/api/analyze \
     Fix    : /ip firewall filter add chain=input action=drop comment="drop all"
 
 [2] SOCKS proxy is enabled
-    Impact : Router can be used as an anonymous tunnel
+    Impact : Router can be used as an anonymous traffic tunnel
     Fix    : /ip socks set enabled=no
 
 🟠 HIGH (3 issues)
 ─────────────────────────────────────────────
-[3] DNS server allows remote requests (allow-remote-requests=yes)
+[3] DNS server allows remote requests
     Impact : DNS amplification attack vector
     Fix    : /ip dns set allow-remote-requests=no
 
@@ -139,7 +143,7 @@ curl -X POST https://auto-infra-doctor.vercel.app/api/analyze \
 
 [5] No brute-force protection on Winbox/SSH
     Impact : Unlimited login attempts allowed
-    Fix    : Add connection-limit + address-list rules (see docs/RULES.md)
+    Fix    : Add connection-limit + address-list rules — see docs/RULES.md
 ```
 
 ---
@@ -152,12 +156,12 @@ curl -X POST https://auto-infra-doctor.vercel.app/api/analyze \
 | 🌐 **Exposure** | Winbox on WAN, SOCKS/proxy enabled, UPnP, neighbor discovery |
 | 🧠 **DNS & Services** | Open resolver, bandwidth server, API on public interface |
 | 🔑 **Authentication** | Default admin account, no brute-force protection |
-| 📡 **NAT** | Duplicate masquerade rules, unscoped masquerade |
+| 📡 **NAT** | Duplicate masquerade rules, unscoped NAT |
 | 🚦 **Routing** | Multiple default routes, asymmetric paths |
 | 🔒 **VPN** | Weak IPSec proposals, L2TP without encryption |
-| ⚙️ **Performance** | Oversized ruleset, FastTrack not enabled, connection tracking misconfig |
+| ⚙️ **Performance** | Oversized rulesets, FastTrack disabled, connection tracking issues |
 
-> **20+ checks** across all categories. New rules added continuously. See the full [Rule Reference →](docs/RULES.md)
+> **20+ checks** across all categories. New rules added every release. See the [Rule Reference →](docs/RULES.md)
 
 ---
 
@@ -166,25 +170,28 @@ curl -X POST https://auto-infra-doctor.vercel.app/api/analyze \
 ```
 auto-infra-doctor/
 ├── api/
-│   └── analyze.js          ← Serverless API handler (Vercel)
+│   └── analyze.js          ← Serverless API handler (Vercel) — HTTP only
 ├── src/
-│   ├── engine.js            ← Orchestrator — rule runners + AI layer
+│   ├── engine.js            ← Orchestrator: runs all rule modules + AI layer
 │   ├── validator.js         ← Input validation & sanitization
 │   ├── rules/
 │   │   ├── mikrotik.js      ← Core RouterOS rules
-│   │   ├── firewall.js      ← Firewall-specific detection
-│   │   ├── nat.js           ← NAT analysis
+│   │   ├── firewall.js      ← Firewall chain detection
+│   │   ├── nat.js           ← NAT / masquerade analysis
 │   │   ├── routing.js       ← BGP / OSPF / static route checks
 │   │   └── vpn.js           ← IPSec / L2TP / WireGuard checks
 │   └── ai/
-│       ├── heuristics.js    ← Pattern intelligence (free, no API key)
-│       └── openai.js        ← Optional GPT-4o-mini layer
+│       ├── heuristics.js    ← Pattern intelligence (no API key needed)
+│       └── openai.js        ← Optional GPT-4o-mini analysis layer
 ├── dashboard/               ← Static frontend (HTML + CSS + JS)
 ├── bin/
-│   └── cli.js               ← CLI entry point
+│   └── cli.js               ← CLI entry point (`npx auto-infra-doctor`)
 ├── examples/                ← Sample RouterOS configs for testing
 ├── docs/                    ← Extended documentation
-└── vercel.json              ← Deployment config with security headers
+├── .github/
+│   ├── workflows/           ← CI/CD: audit, npm publish
+│   └── FUNDING.yml          ← Sponsor configuration
+└── vercel.json              ← Deployment + security headers
 ```
 
 The API handler is intentionally thin — it handles only HTTP concerns (rate limiting, validation, CORS, response shaping). All business logic lives in `src/`.
@@ -196,9 +203,9 @@ The API handler is intentionally thin — it handles only HTTP concerns (rate li
 | Document | Description |
 |---|---|
 | [docs/API.md](docs/API.md) | REST API reference — endpoints, request/response shapes, error codes |
-| [docs/CLI.md](docs/CLI.md) | CLI usage, all flags, output formats, CI/CD integration |
+| [docs/CLI.md](docs/CLI.md) | CLI usage guide — all flags, output formats, CI/CD integration |
 | [docs/RULES.md](docs/RULES.md) | Full rule catalogue — severity, detection logic, fix commands |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | How to add rules, run tests, submit PRs |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | How to add rules, run tests, and submit PRs |
 | [SECURITY.md](SECURITY.md) | Vulnerability disclosure policy |
 | [CHANGELOG.md](CHANGELOG.md) | Version history and release notes |
 | [SUPPORT.md](SUPPORT.md) | How to get help |
@@ -210,23 +217,25 @@ The API handler is intentionally thin — it handles only HTTP concerns (rate li
 - [x] Core MikroTik rule engine
 - [x] Serverless REST API (Vercel)
 - [x] Web dashboard
-- [x] CLI (`npx auto-infra-doctor`)
+- [x] CLI via `npx auto-infra-doctor`
 - [x] Automated CI audit workflow
-- [x] Published to npm registry — [`auto-infra-doctor`](https://www.npmjs.com/package/auto-infra-doctor)
-- [ ] Expanded rules (20+ checks across all categories)
-- [ ] AI-enhanced analysis layer (GPT-4o-mini, opt-in)
-- [ ] Health score gauge in UI
-- [ ] Hash-based shareable report links
+- [x] npm registry publish ([`auto-infra-doctor`](https://www.npmjs.com/package/auto-infra-doctor))
+- [x] Security headers + rate limiting
+- [ ] Expanded rules — 20+ checks across all categories
+- [ ] AI-enhanced analysis (GPT-4o-mini, opt-in via `OPENAI_API_KEY`)
+- [ ] Health score gauge in dashboard UI
+- [ ] Hash-based shareable report URLs
 - [ ] PDF report export
-- [ ] GitHub Action (`auto-infra-doctor/scan@v1`)
+- [ ] GitHub Action: `auto-infra-doctor/scan@v1`
 - [ ] VSCode extension
 - [ ] Slack / webhook alert integration
+- [ ] Team API keys + usage dashboard
 
 ---
 
 ## 💖 Sponsorship
 
-AutoInfra Doctor is free and open-source. If it saves you debugging time, consider sponsoring its development:
+AutoInfra Doctor is free and open-source. If it saves you debugging time or catches a production issue, consider supporting its development:
 
 <div align="center">
 
@@ -237,14 +246,14 @@ AutoInfra Doctor is free and open-source. If it saves you debugging time, consid
 
 **Sponsors receive:**
 - 🚀 Early access to Pro features
-- ⚡ Priority issue responses
-- 📝 Name listed in CHANGELOG and README
+- ⚡ Priority issue responses  
+- 📝 Name listed in CHANGELOG and README contributors section
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are what make open-source great. The most impactful way to contribute is by **adding a new detection rule** — every real-world misconfiguration you've encountered is a candidate.
+The most impactful contribution is **adding a new detection rule** — every real-world MikroTik misconfiguration you've encountered is a candidate.
 
 ```bash
 git clone https://github.com/SamoTech/auto-infra-doctor.git
@@ -253,12 +262,12 @@ npm install
 npm test
 ```
 
-1. Fork the repo and create a branch: `git checkout -b feat/rule-upnp-check`
+1. Fork the repo and create your branch: `git checkout -b feat/rule-upnp-check`
 2. Add your rule to the appropriate file in `src/rules/`
 3. Add a test case in `tests/` using a real-world config snippet
-4. Submit a PR with a description of the misconfiguration and why it matters
+4. Submit a PR — describe the misconfiguration and why it matters in production
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide including code style, commit conventions, and PR checklist.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide, code style, commit conventions, and PR checklist.
 
 ---
 
@@ -267,14 +276,14 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide including code style, 
 <!-- ALL-CONTRIBUTORS-LIST:START -->
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-Thanks to everyone who has contributed rules, fixes, and feedback. See all [contributors →](https://github.com/SamoTech/auto-infra-doctor/graphs/contributors)
+Thanks to everyone who has contributed rules, fixes, and feedback.  
+See all [contributors →](https://github.com/SamoTech/auto-infra-doctor/graphs/contributors)
 
 ---
 
 ## 📄 License
 
-MIT © 2024–2026 [SamoTech](https://github.com/SamoTech)
-
+MIT © 2024–2026 [SamoTech](https://github.com/SamoTech)  
 See [LICENSE](LICENSE) for the full text.
 
 ---

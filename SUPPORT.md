@@ -2,42 +2,57 @@
 
 ## How to Get Help
 
-| Channel | Use for |
+### 🐛 Found a bug?
+
+Open a [bug report](https://github.com/SamoTech/auto-infra-doctor/issues/new?template=bug_report.md) on GitHub Issues.  
+Include the config snippet that caused the issue (redact sensitive values), your Node.js version, and the full error output.
+
+### 💡 Have a feature request or idea?
+
+Start a [GitHub Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) — this is the best place for ideas, questions, and open-ended conversation.
+
+### 📖 Need help with usage?
+
+Check the documentation first:
+
+| Resource | Link |
 |---|---|
-| [GitHub Issues](https://github.com/SamoTech/auto-infra-doctor/issues) | Bug reports, incorrect rule detections |
-| [GitHub Discussions](https://github.com/SamoTech/auto-infra-doctor/discussions) | Questions, feature ideas, general usage help |
-| [docs/API.md](docs/API.md) | REST API reference |
-| [docs/CLI.md](docs/CLI.md) | CLI flags and usage |
-| [docs/RULES.md](docs/RULES.md) | Understanding why a rule fired |
+| Web App | [auto-infra-doctor.vercel.app](https://auto-infra-doctor.vercel.app/) |
+| CLI Guide | [docs/CLI.md](docs/CLI.md) |
+| API Reference | [docs/API.md](docs/API.md) |
+| Rule Catalogue | [docs/RULES.md](docs/RULES.md) |
+| FAQ | [docs/FAQ.md](docs/FAQ.md) |
+
+### 🔐 Found a security vulnerability?
+
+Do **not** open a public issue. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
 
 ---
 
-## Before Opening an Issue
+## Community
 
-1. Check the [existing issues](https://github.com/SamoTech/auto-infra-doctor/issues?q=is%3Aissue) — your problem may already be reported
-2. Read [docs/RULES.md](docs/RULES.md) — the rule may be intentional
-3. Verify you are on the latest version: `npx auto-infra-doctor --version`
-
----
-
-## Reporting a False Positive
-
-If AutoInfra Doctor flags something you believe is correctly configured, open an issue with:
-
-- The exact config line(s) that triggered the false positive
-- Why you believe it is a false positive
-- Your RouterOS version and use case context
-
-False positive reports are high-priority — they directly improve rule quality.
+- **GitHub Issues** — bugs and confirmed problems
+- **GitHub Discussions** — questions, ideas, general help
+- **r/mikrotik** — community discussion
+- **r/homelab** — homelab networking discussion
 
 ---
 
-## Security Vulnerabilities
+## Response Times
 
-For security issues, do **not** open a public issue. See [SECURITY.md](SECURITY.md) for the responsible disclosure process.
+| Type | Expected response |
+|---|---|
+| Security vulnerability | Within 48 hours |
+| Bug report (with reproduction) | Within 5 business days |
+| Feature request | Best effort — reviewed in batches |
+| General question | Community-driven |
 
 ---
 
-## Commercial Support
+## Sponsoring for Priority Support
 
-Need help integrating AutoInfra Doctor into your infrastructure or CI/CD pipeline? [Open a Discussion](https://github.com/SamoTech/auto-infra-doctor/discussions) describing your use case.
+Sponsors via [GitHub Sponsors](https://github.com/sponsors/SamoTech) or [Buy Me a Coffee](https://buymeacoffee.com/samotech) receive priority responses on issues and feature requests.
+
+---
+
+MIT © 2024–2026 [SamoTech](https://github.com/SamoTech)
