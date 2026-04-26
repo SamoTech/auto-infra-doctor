@@ -23,11 +23,10 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
-          cache: "npm"
+          node-version: "24"
 
       - name: Install dependencies (full — including devDeps for complete audit)
-        run: npm ci
+        run: npm install
 
       - name: Ensure audit labels exist
         run: |
@@ -48,7 +47,6 @@ jobs:
 
           echo "### 📁 Repository Structure Check" >> audit-report.md
 
-          # Check for critical files
           files=("api/analyze.js" "src/rules/mikrotik.js" "src/engine.js" "src/validator.js" "vercel.json" "package.json")
           for f in "${files[@]}"; do
             if [ -f "$f" ]; then
@@ -61,14 +59,12 @@ jobs:
           echo "" >> audit-report.md
           echo "### 🔐 Security Pattern Scan" >> audit-report.md
 
-          # localStorage check
           if grep -r "localStorage" dashboard/ index.html 2>/dev/null | grep -q .; then
             echo "- ⚠️ **localStorage detected** — may silently fail in sandboxed iframe contexts" >> audit-report.md
           else
             echo "- ✅ No localStorage usage found" >> audit-report.md
           fi
 
-          # innerHTML check
           if grep -r "innerHTML" dashboard/ index.html 2>/dev/null | grep -q .; then
             ESCAPED=$(grep -r "escapeHtml\|textContent" dashboard/ index.html 2>/dev/null | wc -l)
             if [ "$ESCAPED" -gt "0" ]; then
@@ -80,21 +76,18 @@ jobs:
             echo "- ✅ No raw innerHTML usage found" >> audit-report.md
           fi
 
-          # Rate limiting check
           if grep -q "rate\|RATE\|rateLimit\|429" api/analyze.js 2>/dev/null; then
             echo "- ✅ Rate limiting present in API handler" >> audit-report.md
           else
             echo "- ❌ **No rate limiting** detected in \`api/analyze.js\`" >> audit-report.md
           fi
 
-          # Input validation check
           if grep -q "validator\|validateConfig\|config.length" api/analyze.js 2>/dev/null; then
             echo "- ✅ Input validation present in API handler" >> audit-report.md
           else
             echo "- ❌ **No input validation** detected in \`api/analyze.js\`" >> audit-report.md
           fi
 
-          # Workflow permissions check
           if grep -q "permissions" .github/workflows/*.yml 2>/dev/null; then
             echo "- ✅ Workflow permissions are explicitly scoped" >> audit-report.md
           else
