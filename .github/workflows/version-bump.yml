@@ -1,8 +1,5 @@
 name: Version Bump & Tag
 
-# Manually trigger a version bump from GitHub Actions tab
-# This bumps package.json, commits, tags, and pushes —
-# which then triggers publish-npm.yml automatically.
 on:
   workflow_dispatch:
     inputs:
@@ -26,7 +23,7 @@ jobs:
     name: Bump version and push tag
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # needed to push commit + tag
+      contents: write
 
     steps:
       - name: Checkout repository

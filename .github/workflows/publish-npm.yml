@@ -1,12 +1,9 @@
 name: Publish to npm
 
-# Triggers on any tag pushed as v* (e.g. v1.2.0, v2.0.0)
 on:
   push:
     tags:
       - 'v*'
-
-# Also allows manual trigger from the Actions tab
   workflow_dispatch:
     inputs:
       dry_run:
@@ -21,25 +18,22 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      id-token: write  # required for npm provenance
+      id-token: write
 
     steps:
-      # 1. Checkout
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # 2. Setup Node 24 with npm registry auth
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
 
-      # 3. Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      # 4. Run tests only if test files exist
       - name: Run tests (if test suite exists)
         run: |
           TEST_COUNT=$(find tests -name '*.test.*' 2>/dev/null | wc -l || echo 0)
@@ -50,35 +44,28 @@ jobs:
             echo "No test files found in tests/ — skipping test step"
           fi
 
-      # 5. Verify NPM_TOKEN is available before attempting publish
       - name: Check NPM_TOKEN is configured
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
           if [ -z "$NODE_AUTH_TOKEN" ]; then
             echo "❌ NPM_TOKEN secret is not set."
-            echo "   Go to: Settings → Secrets and variables → Actions → New repository secret"
-            echo "   Name: NPM_TOKEN"
-            echo "   Value: your npm access token (npmjs.com → Access Tokens → Generate New Token → Automation)"
             exit 1
           fi
           echo "✅ NPM_TOKEN is configured"
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # 6. Verify package contents (always runs — safe dry-run preview)
       - name: Verify package contents (dry run)
         run: |
           echo "=== Files that will be published ==="
           npm pack --dry-run
 
-      # 7. Publish (skipped if dry_run input is true)
       - name: Publish to npm
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: npm publish --access public --provenance
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      # 8. Summary
       - name: Print published version
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |

@@ -7,7 +7,6 @@ on:
     - cron: "0 9 * * *"
   workflow_dispatch:
 
-# Explicit permissions — issues:write is required to create/update issues
 permissions:
   contents: read
   issues: write
@@ -24,9 +23,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+          cache: "npm"
 
-      - name: Install dependencies (full — including devDeps for complete audit)
-        run: npm install
+      - name: Install dependencies
+        run: npm ci
 
       - name: Ensure audit labels exist
         run: |
@@ -46,7 +46,6 @@ jobs:
           echo "" >> audit-report.md
 
           echo "### 📁 Repository Structure Check" >> audit-report.md
-
           files=("api/analyze.js" "src/rules/mikrotik.js" "src/engine.js" "src/validator.js" "vercel.json" "package.json")
           for f in "${files[@]}"; do
             if [ -f "$f" ]; then
