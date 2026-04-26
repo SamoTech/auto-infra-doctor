@@ -1,0 +1,7 @@
+{
+  "routes": [
+    { "src": "/", "dest": "/dashboard/landing.html" },
+    { "src": "/app", "dest": "/dashboard/app.html" },
+    { "src": "/reports", "dest": "/dashboard/reports.html" }
+  ]
+}
