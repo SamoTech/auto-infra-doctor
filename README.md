@@ -8,8 +8,6 @@
 <div align="center">
 
 [![Live Demo](https://img.shields.io/badge/🌐_Live_App-auto--infra--doctor.vercel.app-01696f?style=for-the-badge&logo=vercel&logoColor=white)](https://auto-infra-doctor.vercel.app/)
-[![npm version](https://img.shields.io/npm/v/auto-infra-doctor?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/auto-infra-doctor)
-[![npm downloads](https://img.shields.io/npm/dm/auto-infra-doctor?style=for-the-badge&logo=npm&logoColor=white&color=CB3837)](https://www.npmjs.com/package/auto-infra-doctor)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org)
 
@@ -42,7 +40,7 @@
 
 ## ⚠️ The Problem
 
-Debugging RouterOS configurations is slow, manual, and error-prone. One bad firewall rule can expose your entire network. One missing NAT entry breaks connectivity for hundreds of users. MikroTik's documentation is thorough — but it doesn't tell you what's *wrong* with **your specific config**.
+Debugging RouterOS configurations is slow, manual, and error-prone. One bad firewall rule can expose your entire network. One missing NAT entry breaks connectivity for hundreds of users. MikroTik’s documentation is thorough — but it doesn’t tell you what’s *wrong* with **your specific config**.
 
 AutoInfra Doctor does exactly that. Paste your config, get a prioritized list of issues with exact CLI fixes — no account, no install, no noise.
 
@@ -56,13 +54,18 @@ Paste your config at **[auto-infra-doctor.vercel.app](https://auto-infra-doctor.
 
 ### ⚙️ CLI
 
-```bash
-# One-time use (no install)
-npx auto-infra-doctor analyze examples/mikrotik-broken.rsc --mode full
+> **Note:** npm publish is in progress. Until the package is live on npm, clone and run locally:
 
-# Global install
+```bash
+# Clone and run directly
+git clone https://github.com/SamoTech/auto-infra-doctor.git
+cd auto-infra-doctor
+npm install
+node bin/cli.js analyze examples/mikrotik-broken.rsc
+
+# Once published to npm:
+npx auto-infra-doctor analyze /path/to/config.rsc
 npm install -g auto-infra-doctor
-auto-infra-doctor analyze /path/to/config.rsc
 auto-infra-doctor analyze /path/to/config.rsc --mode full --format json
 ```
 
@@ -197,6 +200,7 @@ The API handler is intentionally thin — it handles only HTTP concerns (rate li
 - [x] Web dashboard
 - [x] CLI (`npx auto-infra-doctor`)
 - [x] Automated CI audit workflow
+- [ ] Publish to npm registry
 - [ ] Expanded rules (20+ checks across all categories)
 - [ ] AI-enhanced analysis layer (GPT-4o-mini, opt-in)
 - [ ] Health score gauge in UI
@@ -228,7 +232,7 @@ AutoInfra Doctor is free and open-source. If it saves you debugging time, consid
 
 ## 🤝 Contributing
 
-Contributions are what make open-source great. The most impactful way to contribute is by **adding a new detection rule** — every real-world misconfiguration you've encountered is a candidate.
+Contributions are what make open-source great. The most impactful way to contribute is by **adding a new detection rule** — every real-world misconfiguration you’ve encountered is a candidate.
 
 ```bash
 git clone https://github.com/SamoTech/auto-infra-doctor.git

@@ -1,0 +1,28 @@
+# Files/dirs to exclude from the npm package
+# Only bin/, src/, and examples/ are needed for CLI usage
+
+# Vercel / deployment
+vercel.json
+vercel-routing.json
+.vercel/
+
+# Frontend dashboard (not needed for CLI/API consumers)
+dashboard/
+index.html
+assets/
+
+# Docs & community files (included in GitHub, not npm)
+docs/
+.github/
+*.md
+!README.md
+
+# Dev & test
+tests/
+.env
+.env.*
+
+# Misc
+.DS_Store
+*.log
+node_modules/
