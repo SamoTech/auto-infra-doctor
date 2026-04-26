@@ -1,45 +1,97 @@
 # AutoInfra Doctor
 
-Find and fix broken infrastructure configs in seconds.
+> Find and fix broken MikroTik configs in seconds.
 
-## The Problem
+---
 
-You paste a config.
-You debug for hours.
-Still broken.
+## Why this exists
 
-## The Solution
+Debugging RouterOS configs is slow and error‑prone.
+Small mistakes cause outages, open attack surface, or wasted CPU.
 
-AutoInfra Doctor tells you:
-- What is wrong
-- Why it matters
-- Exact fix commands
+AutoInfra Doctor turns configs into:
+- detected issues
+- real impact
+- exact CLI fixes
 
-## Example
+---
 
-Input:
+## What you get
+
+- Deterministic checks (works without AI)
+- CLI-ready fixes
+- Security flags (input chain, exposure)
+- Clear severity levels
+
+---
+
+## Quick demo
+
+### Input (examples/mikrotik-broken.rsc)
 ```
+/ip firewall filter add chain=input action=accept
 /ip firewall nat add chain=srcnat action=masquerade
 /ip firewall nat add chain=srcnat action=masquerade
 ```
 
-Output:
+### Output
 ```
-[CRITICAL] Duplicate NAT rule
+[CRITICAL][Logic] Duplicate NAT masquerade rule detected
 [FIX] /ip firewall nat remove 1
+
+[HIGH][Security] Open input chain allows all traffic
+[FIX] Add drop rule for input chain
 ```
 
-## Usage
+---
+
+## Install & run
 
 ```
-npx auto-infra-doctor analyze config.rsc --mode full
+npm i -g auto-infra-doctor
+# or
+npx auto-infra-doctor analyze examples/mikrotik-broken.rsc --mode full
 ```
 
-## Roadmap
-- CLI
-- AI engine
-- Web UI
-- SaaS
+---
 
-## Vision
-Make infrastructure debugging instant.
+## Supported (v1)
+
+- MikroTik (RouterOS) — prioritized
+
+Planned:
+- Nginx
+- Docker
+- VPN / Cloudflare
+
+---
+
+## Modes
+
+- diagnose
+- fix
+- security
+- optimize
+- autofix (planned)
+
+---
+
+## Project status
+
+- [x] CLI scaffold
+- [x] MikroTik basic detections
+- [ ] AI engine (structured JSON)
+- [ ] Advanced RouterOS rules (queues, dstnat, fasttrack)
+- [ ] Web UI
+
+---
+
+## Contributing
+
+PRs with real-world configs are welcome. Add a broken config in `examples/` + expected output.
+
+---
+
+## If this saves you time
+
+Star the repo and share with a network engineer who still debugs by hand.
