@@ -1,7 +1,6 @@
 {
   "rewrites": [
-    { "source": "/api/analyze", "destination": "/api/analyze.js" },
-    { "source": "/", "destination": "/dashboard/app.html" }
+    { "source": "/api/analyze", "destination": "/api/analyze.js" }
   ],
   "headers": [
     {
