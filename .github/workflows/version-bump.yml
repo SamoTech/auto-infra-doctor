@@ -1,0 +1,67 @@
+name: Version Bump & Tag
+
+# Manually trigger a version bump from GitHub Actions tab
+# This bumps package.json, commits, tags, and pushes —
+# which then triggers publish-npm.yml automatically.
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type'
+        required: true
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+      dry_run:
+        description: 'Dry run (preview only, no commit)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  bump:
+    name: Bump version and push tag
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # needed to push commit + tag
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Configure git
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Preview new version
+        run: |
+          CURRENT=$(node -p "require('./package.json').version")
+          echo "Current version : $CURRENT"
+          echo "Bump type       : ${{ github.event.inputs.bump }}"
+
+      - name: Bump version, commit and tag
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          npm version ${{ github.event.inputs.bump }} -m "chore(release): bump version to v%s"
+          git push --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dry run summary
+        if: ${{ github.event.inputs.dry_run == 'true' }}
+        run: |
+          echo "DRY RUN — no changes made."
+          CURRENT=$(node -p "require('./package.json').version")
+          npx semver $CURRENT -i ${{ github.event.inputs.bump }}
