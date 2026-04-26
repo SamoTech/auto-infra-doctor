@@ -2,71 +2,62 @@
 
 ## Supported Versions
 
+Security fixes are applied to the latest release only.
+
 | Version | Supported |
 |---|---|
-| Latest (`main` branch) | ✅ Active |
-| Older releases | ❌ No backports |
+| `1.x` (latest) | ✅ Yes |
+| `< 1.0` | ❌ No |
 
 ---
 
 ## Reporting a Vulnerability
 
-**Please do not open a public GitHub issue for security vulnerabilities.** Public disclosure before a fix is ready puts users at risk.
+**Please do not open a public GitHub issue for security vulnerabilities.** Public disclosure before a fix is available puts all users at risk.
 
-### How to Report
+### How to report
 
-Send a private report via **[GitHub Security Advisories](https://github.com/SamoTech/auto-infra-doctor/security/advisories/new)**.
+1. **Email:** Send details to the repository owner via the contact method listed on [github.com/SamoTech](https://github.com/SamoTech).
+2. **GitHub Private Advisory:** Use [GitHub's private vulnerability reporting](https://github.com/SamoTech/auto-infra-doctor/security/advisories/new) if available on your account.
 
-Include:
-- Description of the vulnerability
-- Steps to reproduce (proof of concept if possible)
-- Affected component (`api/`, `src/`, `dashboard/`, CLI)
-- Potential impact assessment
+### What to include
 
-### Response Timeline
+- A clear description of the vulnerability
+- Steps to reproduce or a proof-of-concept
+- Potential impact (what an attacker could do)
+- Affected version(s)
+- Any suggested fix, if you have one
 
-| Stage | Target |
+---
+
+## Response Timeline
+
+| Phase | Target time |
 |---|---|
-| Acknowledgement | Within 48 hours |
-| Initial assessment | Within 5 business days |
-| Fix released | Within 14 days for Critical/High |
-| Public disclosure | After fix is deployed |
+| Acknowledgement | Within **48 hours** |
+| Initial assessment | Within **5 business days** |
+| Fix and patch release | Within **30 days** for critical issues |
+| Public disclosure | After fix is released and users have had time to update |
 
 ---
 
 ## Scope
 
-### In Scope
+Vulnerabilities relevant to this project include:
 
-- **API endpoint** (`/api/analyze`) — injection, denial of service, auth bypass
-- **Frontend** (`dashboard/`) — XSS, CSRF, data leakage
-- **CLI** (`bin/cli.js`) — arbitrary file read, command injection
-- **Rules engine** (`src/`) — logic that could produce misleading or dangerous fix recommendations
+- **API security:** Rate limiting bypass, authentication bypass, injection via the `/api/analyze` endpoint
+- **XSS:** Frontend rendering of user-supplied or API-returned content
+- **Dependency vulnerabilities:** Known CVEs in dependencies used by the project
+- **Information disclosure:** Unintended exposure of server internals or configuration
 
-### Out of Scope
+**Out of scope:**
 
-- Vulnerabilities in third-party dependencies (report to the upstream package maintainer)
-- Rate limiting bypass on free tier (by design — upgrade to Pro for SLA guarantees)
-- Issues requiring physical access to the server
-
----
-
-## Security Architecture Notes
-
-The API processes untrusted RouterOS config strings. Key mitigations in place:
-
-- Input validated and size-limited before processing (500 KB max)
-- All rule analysis is pure string matching — no `eval()`, no `exec()`, no shell commands
-- API responses escape all user-derived content before rendering
-- Security headers set on all responses (`X-Content-Type-Options`, `X-Frame-Options`, `Referrer-Policy`)
-- Rate limiting: 10 requests/minute per IP
+- Issues in RouterOS itself or MikroTik hardware — report those to [MikroTik directly](https://mikrotik.com/contact)
+- Vulnerabilities that require physical access to the server
+- Issues only reproducible in non-production environments
 
 ---
 
-## Hall of Fame
+## Responsible Disclosure
 
-Responsible disclosure is appreciated. Reporters of valid vulnerabilities will be credited here (with permission).
-
-| Researcher | Issue | Disclosed |
-|---|---|---|
-| — | — | — |
+This project follows a coordinated disclosure model. Reporters who follow this process will be credited in the release notes (unless they prefer to remain anonymous).

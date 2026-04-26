@@ -1,0 +1,6 @@
+# Funding configuration for AutoInfra Doctor
+# Displayed as the "Sponsor" button on the repository page
+
+github: [SamoTech]
+custom:
+  - https://buymeacoffee.com/samotech
