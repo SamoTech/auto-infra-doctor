@@ -6,7 +6,9 @@
 
 # AutoInfra Doctor
 
-> Find and fix broken MikroTik configs in seconds.
+> Find and fix MikroTik configs instantly
+
+🌐 **Live App:** https://auto-infra-doctor.vercel.app/
 
 ---
 
@@ -26,10 +28,12 @@ npx auto-infra-doctor analyze examples/mikrotik-broken.rsc --mode full
 ### Output
 ```
 [CRITICAL][Logic] Duplicate NAT masquerade rule detected
-[FIX] /ip firewall nat remove 1
+Impact: May cause routing conflicts and CPU waste
+Fix: /ip firewall nat remove [find where action=masquerade]
 
-[HIGH][Security] Open input chain allows all traffic
-[FIX] Add drop rule for input chain
+[HIGH][Security] Input chain allows unrestricted access
+Impact: Router exposed to external attacks
+Fix: /ip firewall filter add chain=input action=drop
 ```
 
 ---
@@ -37,7 +41,7 @@ npx auto-infra-doctor analyze examples/mikrotik-broken.rsc --mode full
 ## ⚡ What You Get
 
 - Real issue detection
-- Clear impact explanation
+- Impact explanation
 - Exact CLI fixes
 - Security insights
 
