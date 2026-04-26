@@ -3,19 +3,28 @@
 <head>
   <title>AutoInfra Doctor</title>
   <style>
-    body { font-family: Arial; background:#020617; color:#22c55e; padding:20px }
-    textarea { width:100%; height:200px }
-    button { padding:10px 20px; margin-top:10px }
-    pre { background:#000; padding:10px }
+    body { font-family: Arial; background:#020617; color:#e5e7eb; padding:30px; max-width:900px; margin:auto }
+    h1 { color:#22c55e }
+    textarea { width:100%; height:180px; background:#000; color:#22c55e; padding:10px }
+    button { padding:12px 20px; margin-top:10px; background:#22c55e; border:none; cursor:pointer }
+    .card { background:#111827; padding:15px; margin-top:15px; border-radius:10px }
+    .critical { border-left:5px solid red }
+    .high { border-left:5px solid orange }
   </style>
 </head>
 <body>
-  <h1>AutoInfra Doctor</h1>
-  <p>Paste your MikroTik config:</p>
-  <textarea id="config"></textarea>
-  <br/>
+
+  <h1>Fix MikroTik config mistakes instantly</h1>
+
+  <p>Paste your config below:</p>
+
+  <textarea id="config">/ip firewall filter add chain=input action=accept
+/ip firewall nat add chain=srcnat action=masquerade
+/ip firewall nat add chain=srcnat action=masquerade</textarea>
+
   <button onclick="analyze()">Analyze</button>
-  <pre id="output"></pre>
+
+  <div id="output"></div>
 
   <script>
     async function analyze(){
@@ -25,9 +34,28 @@
         headers:{'Content-Type':'application/json'},
         body: JSON.stringify({config})
       });
+
       const data = await res.json();
-      document.getElementById('output').textContent = JSON.stringify(data,null,2);
+      const container = document.getElementById('output');
+      container.innerHTML = '';
+
+      if(!data.issues || data.issues.length === 0){
+        container.innerHTML = '<div class="card">✅ No issues detected</div>';
+        return;
+      }
+
+      data.issues.forEach(issue => {
+        const div = document.createElement('div');
+        div.className = 'card ' + issue.severity.toLowerCase();
+        div.innerHTML = `
+          <strong>${issue.severity}</strong><br/>
+          ${issue.message}<br/>
+          <code>${issue.fix}</code>
+        `;
+        container.appendChild(div);
+      });
     }
   </script>
+
 </body>
 </html>
