@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AutoInfra Doctor Dashboard</title>
+<style>
+body{font-family:Arial;background:#020617;color:#e5e7eb;margin:0}
+header{padding:20px;background:#020617;border-bottom:1px solid #111}
+h1{color:#22c55e}
+.container{padding:20px}
+.card{background:#111827;padding:15px;margin:10px 0;border-radius:10px}
+button{padding:10px;background:#22c55e;border:none;cursor:pointer}
+textarea{width:100%;height:150px;background:#000;color:#22c55e}
+</style>
+</head>
+<body>
+<header>
+<h1>AutoInfra Doctor SaaS</h1>
+<p>Analyze, monitor and fix MikroTik configs</p>
+</header>
+<div class="container">
+<div class="card">
+<h3>Quick Analyze</h3>
+<textarea id="config"></textarea>
+<button onclick="analyze()">Analyze</button>
+<pre id="output"></pre>
+</div>
+<div class="card">
+<h3>Project</h3>
+<p>GitHub Repo:</p>
+<a href="https://github.com/SamoTech/auto-infra-doctor" target="_blank">Open Repository</a>
+</div>
+</div>
+<script>
+async function analyze(){
+ const config=document.getElementById('config').value;
+ const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({config})});
+ const data=await res.json();
+ document.getElementById('output').textContent=JSON.stringify(data,null,2);
+}
+</script>
+</body>
+</html>
