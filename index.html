@@ -16,18 +16,20 @@
 
   <h1>Fix MikroTik config mistakes instantly</h1>
 
-  <p>Paste your config below:</p>
-
   <textarea id="config">/ip firewall filter add chain=input action=accept
 /ip firewall nat add chain=srcnat action=masquerade
 /ip firewall nat add chain=srcnat action=masquerade</textarea>
 
-  <button onclick="analyze()">Analyze</button>
+  <button id="btn" onclick="analyze()">Analyze</button>
 
   <div id="output"></div>
 
   <script>
     async function analyze(){
+      const btn = document.getElementById('btn');
+      btn.innerText = 'Analyzing...';
+      btn.disabled = true;
+
       const config = document.getElementById('config').value;
       const res = await fetch('/api/analyze',{
         method:'POST',
@@ -39,8 +41,11 @@
       const container = document.getElementById('output');
       container.innerHTML = '';
 
+      btn.innerText = 'Analyze';
+      btn.disabled = false;
+
       if(!data.issues || data.issues.length === 0){
-        container.innerHTML = '<div class="card">✅ No issues detected</div>';
+        container.innerHTML = '<div class="card">✅ Config looks clean</div>';
         return;
       }
 
@@ -50,6 +55,7 @@
         div.innerHTML = `
           <strong>${issue.severity}</strong><br/>
           ${issue.message}<br/>
+          <em>${issue.impact}</em><br/>
           <code>${issue.fix}</code>
         `;
         container.appendChild(div);
