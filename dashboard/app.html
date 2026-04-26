@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://va.vercel-scripts.com/v1/script.js"></script>
 <style>
 :root {
   --bg: #0d1117;
@@ -30,260 +31,98 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-font-smoothing:antialiased;scroll-behavior:smooth}
 body{font-family:var(--font);font-size:14px;background:var(--bg);color:var(--text);min-height:100dvh;display:flex}
-
-/* Sidebar */
-.sidebar{
-  width:220px;flex-shrink:0;height:100dvh;position:sticky;top:0;
-  background:var(--surface);border-right:1px solid var(--border);
-  display:flex;flex-direction:column;padding:20px 0;
-}
-.sidebar-logo{
-  display:flex;align-items:center;gap:10px;padding:0 20px 20px;
-  border-bottom:1px solid var(--border);margin-bottom:12px;
-}
+.sidebar{width:220px;flex-shrink:0;height:100dvh;position:sticky;top:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0}
+.sidebar-logo{display:flex;align-items:center;gap:10px;padding:0 20px 20px;border-bottom:1px solid var(--border);margin-bottom:12px}
 .sidebar-logo svg{flex-shrink:0}
 .sidebar-logo span{font-weight:700;font-size:15px;color:var(--text)}
 .sidebar-logo small{display:block;font-size:11px;color:var(--text-muted);font-weight:400}
-.nav-item{
-  display:flex;align-items:center;gap:8px;padding:8px 20px;
-  color:var(--text-muted);text-decoration:none;font-size:13px;font-weight:500;
-  border-radius:0;transition:color var(--transition),background var(--transition);
-  cursor:pointer;border:none;background:none;width:100%;text-align:left;
-}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 20px;color:var(--text-muted);text-decoration:none;font-size:13px;font-weight:500;border-radius:0;transition:color var(--transition),background var(--transition);cursor:pointer;border:none;background:none;width:100%;text-align:left}
 .nav-item:hover,.nav-item.active{color:var(--text);background:rgba(255,255,255,0.05)}
 .nav-item.active{color:var(--primary)}
 .nav-icon{width:16px;height:16px;opacity:0.7;flex-shrink:0}
 .sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--border)}
 .sidebar-footer a{display:flex;align-items:center;gap:8px;color:var(--text-muted);text-decoration:none;font-size:12px;transition:color var(--transition)}
 .sidebar-footer a:hover{color:var(--text)}
-
-/* Main */
 .main{flex:1;min-width:0;padding:32px;overflow-y:auto;max-height:100dvh}
 .page{display:none}
 .page.active{display:block}
-
-/* Page header */
 .page-header{margin-bottom:28px}
 .page-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:4px}
 .page-subtitle{font-size:13px;color:var(--text-muted)}
-
-/* Cards */
-.card{
-  background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);padding:20px;
-}
-
-/* Textarea / Editor */
-.editor-header{
-  display:flex;align-items:center;justify-content:space-between;
-  margin-bottom:10px;
-}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.editor-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
 .editor-label{font-size:12px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em}
 .editor-actions{display:flex;gap:8px}
-.btn-ghost{
-  background:none;border:1px solid var(--border);color:var(--text-muted);
-  padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;
-  font-family:var(--font);transition:all var(--transition);
-}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--text-muted);padding:5px 12px;border-radius:var(--radius);font-size:12px;cursor:pointer;font-family:var(--font);transition:all var(--transition)}
 .btn-ghost:hover{color:var(--text);border-color:rgba(255,255,255,0.2)}
-
-.config-editor{
-  width:100%;height:220px;background:var(--bg);
-  border:1px solid var(--border);border-radius:var(--radius);
-  color:var(--primary);font-family:var(--mono);font-size:12.5px;
-  padding:14px;resize:vertical;line-height:1.6;
-  transition:border-color var(--transition);
-  outline:none;
-}
+.config-editor{width:100%;height:220px;background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);color:var(--primary);font-family:var(--mono);font-size:12.5px;padding:14px;resize:vertical;line-height:1.6;transition:border-color var(--transition);outline:none}
 .config-editor::placeholder{color:var(--text-faint)}
 .config-editor:focus{border-color:rgba(63,185,80,0.4)}
-
-/* Analyze button */
-.btn-analyze{
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  width:100%;margin-top:14px;padding:11px;
-  background:var(--primary);color:#0d1117;font-weight:700;font-size:14px;
-  border:none;border-radius:var(--radius);cursor:pointer;
-  font-family:var(--font);transition:background var(--transition),transform 80ms;
-}
+.btn-analyze{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;padding:11px;background:var(--primary);color:#0d1117;font-weight:700;font-size:14px;border:none;border-radius:var(--radius);cursor:pointer;font-family:var(--font);transition:background var(--transition),transform 80ms}
 .btn-analyze:hover{background:var(--primary-hover)}
 .btn-analyze:active{transform:scale(0.98)}
 .btn-analyze:disabled{opacity:0.6;cursor:not-allowed}
-
-/* Score ring */
-.score-section{
-  display:flex;align-items:center;gap:24px;
-  padding:20px;background:var(--surface);border:1px solid var(--border);
-  border-radius:var(--radius);margin-bottom:20px;
-}
+.score-section{display:flex;align-items:center;gap:24px;padding:20px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:20px}
 .score-ring{position:relative;width:80px;height:80px;flex-shrink:0}
 .score-ring svg{transform:rotate(-90deg)}
-.score-ring-value{
-  position:absolute;inset:0;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-}
+.score-ring-value{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
 .score-number{font-size:22px;font-weight:700;line-height:1}
 .score-label{font-size:10px;color:var(--text-muted);margin-top:2px}
 .score-info h3{font-size:15px;font-weight:600;margin-bottom:4px}
 .score-info p{font-size:13px;color:var(--text-muted)}
 .score-meta{margin-left:auto;text-align:right;font-size:11px;color:var(--text-faint)}
-
-/* Issue groups */
-.issue-group{
-  border:1px solid var(--border);border-radius:var(--radius);
-  margin-bottom:12px;overflow:hidden;
-}
-.issue-group summary{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 16px;cursor:pointer;list-style:none;
-  background:var(--surface);transition:background var(--transition);
-  font-size:13px;font-weight:600;
-  user-select:none;
-}
+.issue-group{border:1px solid var(--border);border-radius:var(--radius);margin-bottom:12px;overflow:hidden}
+.issue-group summary{display:flex;align-items:center;gap:10px;padding:12px 16px;cursor:pointer;list-style:none;background:var(--surface);transition:background var(--transition);font-size:13px;font-weight:600;user-select:none}
 .issue-group summary:hover{background:var(--surface2)}
 .issue-group summary::-webkit-details-marker{display:none}
 .group-chevron{margin-left:auto;opacity:0.5;transition:transform var(--transition)}
 details[open] .group-chevron{transform:rotate(90deg)}
-.group-count{
-  margin-left:auto;margin-right:0;font-size:11px;font-weight:500;
-  background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:20px;
-  color:var(--text-muted);
-}
-
-/* Badges */
-.badge{
-  display:inline-flex;align-items:center;padding:2px 8px;
-  border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.04em;
-}
+.group-count{margin-left:auto;margin-right:0;font-size:11px;font-weight:500;background:rgba(255,255,255,0.06);padding:2px 8px;border-radius:20px;color:var(--text-muted)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:.04em}
 .badge-critical{background:rgba(248,81,73,0.18);color:var(--critical)}
 .badge-high{background:rgba(227,179,65,0.18);color:var(--high)}
 .badge-medium{background:rgba(88,166,255,0.18);color:var(--medium)}
 .badge-low{background:rgba(139,148,158,0.18);color:var(--low)}
-
-/* Issue card */
-.issue-card{
-  padding:14px 16px;border-top:1px solid var(--border);
-  background:var(--bg);
-}
+.issue-card{padding:14px 16px;border-top:1px solid var(--border);background:var(--bg)}
 .issue-message{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--text)}
-.issue-impact{
-  font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.5;
-}
+.issue-impact{font-size:12px;color:var(--text-muted);margin-bottom:10px;line-height:1.5}
 .issue-fix-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--text-faint);margin-bottom:4px}
-.issue-fix{
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:6px;padding:8px 10px;
-  display:flex;align-items:flex-start;justify-content:space-between;gap:8px;
-}
-.issue-fix code{
-  font-family:var(--mono);font-size:11.5px;color:var(--primary);
-  word-break:break-all;line-height:1.6;
-}
-.copy-btn{
-  flex-shrink:0;background:none;border:1px solid var(--border);
-  color:var(--text-muted);padding:3px 8px;border-radius:4px;
-  font-size:11px;cursor:pointer;font-family:var(--font);
-  transition:all var(--transition);
-}
+.issue-fix{background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:8px 10px;display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.issue-fix code{font-family:var(--mono);font-size:11.5px;color:var(--primary);word-break:break-all;line-height:1.6}
+.copy-btn{flex-shrink:0;background:none;border:1px solid var(--border);color:var(--text-muted);padding:3px 8px;border-radius:4px;font-size:11px;cursor:pointer;font-family:var(--font);transition:all var(--transition)}
 .copy-btn:hover{color:var(--text);border-color:rgba(255,255,255,0.2)}
-.source-ai{
-  display:inline-flex;align-items:center;gap:4px;
-  font-size:10px;color:var(--medium);
-  background:rgba(88,166,255,0.1);padding:2px 6px;
-  border-radius:3px;margin-left:8px;vertical-align:middle;
-}
-
-/* Empty state */
-.empty-state{
-  text-align:center;padding:60px 20px;
-  color:var(--text-muted);
-}
+.source-ai{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--medium);background:rgba(88,166,255,0.1);padding:2px 6px;border-radius:3px;margin-left:8px;vertical-align:middle}
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-muted)}
 .empty-icon{font-size:48px;margin-bottom:16px;opacity:0.3}
 .empty-state h3{font-size:15px;font-weight:600;color:var(--text);margin-bottom:6px}
 .empty-state p{font-size:13px;max-width:36ch;margin:0 auto 20px}
-
-/* Loading skeleton */
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-.skeleton{
-  background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);
-  background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;
-  border-radius:var(--radius);
-}
+.skeleton{background:linear-gradient(90deg,var(--surface) 25%,var(--surface2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.5s ease-in-out infinite;border-radius:var(--radius)}
 .skeleton-card{height:80px;margin-bottom:12px}
-
-/* Share banner */
-.share-bar{
-  display:flex;align-items:center;gap:10px;
-  padding:12px 16px;background:rgba(63,185,80,0.08);
-  border:1px solid rgba(63,185,80,0.2);border-radius:var(--radius);
-  margin-top:20px;font-size:12px;color:var(--text-muted);
-}
-.share-bar a,.share-bar button{
-  color:var(--primary);background:none;border:none;cursor:pointer;
-  font-size:12px;font-family:var(--font);text-decoration:underline;
-}
+.share-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(63,185,80,0.08);border:1px solid rgba(63,185,80,0.2);border-radius:var(--radius);margin-top:20px;font-size:12px;color:var(--text-muted)}
+.share-bar a,.share-bar button{color:var(--primary);background:none;border:none;cursor:pointer;font-size:12px;font-family:var(--font);text-decoration:underline}
 .share-bar a:hover,.share-bar button:hover{color:var(--primary-hover)}
-
-/* Reports */
-.report-item{
-  display:flex;align-items:center;gap:14px;
-  padding:14px 16px;cursor:pointer;
-  border-top:1px solid var(--border);transition:background var(--transition);
-}
+.report-item{display:flex;align-items:center;gap:14px;padding:14px 16px;cursor:pointer;border-top:1px solid var(--border);transition:background var(--transition)}
 .report-item:hover{background:var(--surface2)}
-.report-score{
-  width:40px;height:40px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;font-weight:700;flex-shrink:0;
-}
+.report-score{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0}
 .report-meta{flex:1;min-width:0}
 .report-meta h4{font-size:13px;font-weight:600;margin-bottom:2px}
 .report-meta small{font-size:11px;color:var(--text-muted)}
 .report-actions{display:flex;gap:6px}
-
-/* Stats row */
 .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
 .stat-value{font-size:28px;font-weight:700;margin-bottom:2px}
 .stat-label{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em}
-
-/* Toast */
-.toast{
-  position:fixed;bottom:24px;right:24px;
-  background:var(--surface2);border:1px solid var(--border);
-  border-radius:var(--radius);padding:10px 16px;
-  font-size:13px;color:var(--text);
-  opacity:0;transform:translateY(8px);
-  transition:all var(--transition);pointer-events:none;
-  z-index:1000;
-}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;font-size:13px;color:var(--text);opacity:0;transform:translateY(8px);transition:all var(--transition);pointer-events:none;z-index:1000}
 .toast.show{opacity:1;transform:translateY(0)}
-
-/* Scrollbar */
 ::-webkit-scrollbar{width:6px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
-/* Mobile */
-@media(max-width:768px){
-  .sidebar{display:none}
-  .main{padding:16px}
-  .stats-grid{grid-template-columns:repeat(2,1fr)}
-  .mobile-nav{
-    position:fixed;bottom:0;left:0;right:0;
-    background:var(--surface);border-top:1px solid var(--border);
-    display:flex;padding:8px 0 calc(8px + env(safe-area-inset-bottom));
-    z-index:100;
-  }
-  .mobile-nav .nav-item{flex-direction:column;gap:3px;font-size:10px;padding:6px;flex:1;justify-content:center;text-align:center}
-  body{padding-bottom:70px}
-}
+@media(max-width:768px){.sidebar{display:none}.main{padding:16px}.stats-grid{grid-template-columns:repeat(2,1fr)}.mobile-nav{position:fixed;bottom:0;left:0;right:0;background:var(--surface);border-top:1px solid var(--border);display:flex;padding:8px 0 calc(8px + env(safe-area-inset-bottom));z-index:100}.mobile-nav .nav-item{flex-direction:column;gap:3px;font-size:10px;padding:6px;flex:1;justify-content:center;text-align:center}body{padding-bottom:70px}}
 @media(min-width:769px){.mobile-nav{display:none}}
 </style>
 </head>
 <body>
-
-<!-- Sidebar -->
 <aside class="sidebar">
   <div class="sidebar-logo">
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none" aria-label="AutoInfra Doctor logo">
@@ -294,29 +133,21 @@ details[open] .group-chevron{transform:rotate(90deg)}
   </div>
   <nav>
     <button class="nav-item active" onclick="showPage('analyzer')">
-      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z"/>
-      </svg>
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z"/></svg>
       Analyzer
     </button>
     <button class="nav-item" onclick="showPage('reports')">
-      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M3 2h10v12H3zM5 6h6M5 9h4"/>
-      </svg>
+      <svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 2h10v12H3zM5 6h6M5 9h4"/></svg>
       Reports
     </button>
   </nav>
   <div class="sidebar-footer">
     <a href="https://github.com/SamoTech/auto-infra-doctor" target="_blank" rel="noopener">
-      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor">
-        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
-      </svg>
+      <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
       GitHub
     </a>
   </div>
 </aside>
-
-<!-- Mobile nav -->
 <nav class="mobile-nav">
   <button class="nav-item active" onclick="showPage('analyzer')">
     <svg width="18" height="18" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z"/></svg>
@@ -327,17 +158,12 @@ details[open] .group-chevron{transform:rotate(90deg)}
     Reports
   </button>
 </nav>
-
-<!-- Main content -->
 <main class="main">
-
-  <!-- Analyzer page -->
   <div id="page-analyzer" class="page active">
     <div class="page-header">
       <h1 class="page-title">Config Analyzer</h1>
       <p class="page-subtitle">Paste your MikroTik RouterOS export below to detect security issues and misconfigurations</p>
     </div>
-
     <div class="card" style="margin-bottom:20px">
       <div class="editor-header">
         <span class="editor-label">RouterOS Config</span>
@@ -346,38 +172,25 @@ details[open] .group-chevron{transform:rotate(90deg)}
           <button class="btn-ghost" onclick="clearEditor()">Clear</button>
         </div>
       </div>
-      <textarea
-        class="config-editor"
-        id="config"
-        placeholder="Paste your MikroTik config here...&#10;&#10;Example: /ip firewall filter export&#10;         /ip firewall nat export&#10;         /ip dns print&#10;&#10;Tip: use [/export verbose] on your router for best results"
-        spellcheck="false"
-      ></textarea>
+      <textarea class="config-editor" id="config" placeholder="Paste your MikroTik config here...&#10;&#10;Example: /ip firewall filter export&#10;         /ip firewall nat export&#10;         /ip dns print&#10;&#10;Tip: use [/export verbose] on your router for best results" spellcheck="false"></textarea>
       <button class="btn-analyze" id="analyzeBtn" onclick="analyze()">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="8" cy="8" r="6"/>
-          <path d="M8 5v3l2 2"/>
-        </svg>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
         <span id="btnText">Analyze Config</span>
       </button>
     </div>
-
     <div id="results"></div>
   </div>
-
-  <!-- Reports page -->
   <div id="page-reports" class="page">
     <div class="page-header">
       <h1 class="page-title">Reports</h1>
       <p class="page-subtitle">History of your analysis sessions (stored in this browser session)</p>
     </div>
-
     <div class="stats-grid" id="reportsStats" style="display:none">
       <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Analyses</div></div>
       <div class="stat-card"><div class="stat-value" style="color:var(--critical)" id="statCritical">0</div><div class="stat-label">Critical</div></div>
       <div class="stat-card"><div class="stat-value" style="color:var(--high)" id="statHigh">0</div><div class="stat-label">High</div></div>
       <div class="stat-card"><div class="stat-value" style="color:var(--primary)" id="statAvgScore">—</div><div class="stat-label">Avg Score</div></div>
     </div>
-
     <div class="card" id="reportsCard">
       <div id="reportsList">
         <div class="empty-state">
@@ -389,257 +202,22 @@ details[open] .group-chevron{transform:rotate(90deg)}
       </div>
     </div>
   </div>
-
 </main>
-
-<!-- Toast -->
 <div class="toast" id="toast"></div>
-
 <script>
-// ── In-memory report store (no localStorage — sandbox-safe) ──
 const reports = [];
-
-function escapeHtml(str) {
-  const d = document.createElement('div');
-  d.textContent = String(str);
-  return d.innerHTML;
-}
-
-function showPage(name) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => {
-    if (n.getAttribute('onclick') && n.getAttribute('onclick').includes(name)) {
-      n.classList.add('active');
-    }
-  });
-  if (name === 'reports') renderReports();
-}
-
-function loadExample() {
-  document.getElementById('config').value = [
-    '# MikroTik RouterOS v6.49.8 export',
-    '/ip firewall filter',
-    'add chain=input action=accept connection-state=established,related',
-    'add chain=input action=accept protocol=icmp',
-    'add chain=input action=accept dst-port=8291 protocol=tcp',
-    'add chain=input action=accept dst-port=22 protocol=tcp',
-    '/ip firewall nat',
-    'add chain=srcnat action=masquerade',
-    'add chain=srcnat action=masquerade out-interface=ether1',
-    '/ip dns',
-    'set allow-remote-requests=yes servers=8.8.8.8',
-    '/ip neighbor discovery-settings',
-    'set discover-interface-list=all',
-    '/ip upnp',
-    'set enabled=yes',
-    '/ip socks',
-    'set enabled=yes port=1080'
-  ].join('\n');
-}
-
-function clearEditor() {
-  document.getElementById('config').value = '';
-  document.getElementById('results').innerHTML = '';
-}
-
-function showToast(msg, duration = 2500) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), duration);
-}
-
-async function analyze() {
-  const config = document.getElementById('config').value.trim();
-  if (!config) { showToast('Please paste a config first'); return; }
-
-  const btn = document.getElementById('analyzeBtn');
-  const btnText = document.getElementById('btnText');
-  btn.disabled = true;
-  btnText.textContent = 'Analyzing...';
-
-  // Show skeleton
-  document.getElementById('results').innerHTML = [
-    '<div class="skeleton skeleton-card"></div>',
-    '<div class="skeleton skeleton-card"></div>',
-    '<div class="skeleton skeleton-card" style="height:50px"></div>'
-  ].join('');
-
-  try {
-    const res = await fetch('/api/analyze', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ config })
-    });
-
-    if (res.status === 429) {
-      document.getElementById('results').innerHTML = `<div class="card" style="color:var(--high);text-align:center;padding:30px">
-        ⚠️ Rate limit reached — max 10 analyses per minute. Please wait a moment.
-      </div>`;
-      return;
-    }
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: 'Unknown error' }));
-      document.getElementById('results').innerHTML = `<div class="card" style="color:var(--critical);text-align:center;padding:30px">
-        ✖ ${escapeHtml(err.error || 'Analysis failed')}
-      </div>`;
-      return;
-    }
-
-    const data = await res.json();
-    renderResults(data, config);
-
-    // Save to in-memory history
-    reports.unshift({ ...data, configSnippet: config.slice(0, 80), id: Date.now() });
-
-    // Share via URL hash
-    const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(data))));
-    window.location.hash = 'report=' + encoded;
-
-  } catch (err) {
-    document.getElementById('results').innerHTML = `<div class="card" style="color:var(--critical);text-align:center;padding:30px">
-      ✖ Network error — is the API reachable?
-    </div>`;
-  } finally {
-    btn.disabled = false;
-    btnText.textContent = 'Analyze Config';
-  }
-}
-
-function renderResults(data, configSnippet) {
-  const score = data.score ?? 100;
-  const scoreCol = score >= 80 ? 'var(--primary)' : score >= 50 ? 'var(--high)' : 'var(--critical)';
-  const circumference = 2 * Math.PI * 34;
-  const offset = circumference * (1 - score / 100);
-
-  const grouped = { CRITICAL: [], HIGH: [], MEDIUM: [], LOW: [] };
-  (data.issues || []).forEach(i => (grouped[i.severity] || grouped.LOW).push(i));
-
-  const issueGroupsHtml = Object.entries(grouped)
-    .filter(([, items]) => items.length > 0)
-    .map(([sev, items]) => `
-      <details class="issue-group" open>
-        <summary>
-          <span class="badge badge-${sev.toLowerCase()}">${sev}</span>
-          <span style="color:var(--text);margin-left:4px">${items.length} issue${items.length > 1 ? 's' : ''}</span>
-          <svg class="group-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg>
-        </summary>
-        ${items.map(i => `
-          <div class="issue-card">
-            <div class="issue-message">
-              ${escapeHtml(i.message)}
-              ${i.source === 'ai' ? '<span class="source-ai">✦ AI</span>' : ''}
-            </div>
-            <div class="issue-impact">${escapeHtml(i.impact)}</div>
-            <div class="issue-fix-label">Recommended Fix</div>
-            <div class="issue-fix">
-              <code>${escapeHtml(i.fix)}</code>
-              <button class="copy-btn" onclick="copyFix(this, ${JSON.stringify(escapeHtml(i.fix)).replace(/"/g, '&quot;')})">Copy</button>
-            </div>
-          </div>
-        `).join('')}
-      </details>
-    `).join('');
-
-  const noIssues = (data.issues || []).length === 0;
-  const noIssuesHtml = noIssues ? `<div class="empty-state">
-    <div class="empty-icon">✅</div>
-    <h3>No issues detected!</h3>
-    <p>Your config passed all checks. Good work.</p>
-  </div>` : '';
-
-  document.getElementById('results').innerHTML = `
-    <div class="score-section">
-      <div class="score-ring">
-        <svg width="80" height="80" viewBox="0 0 80 80">
-          <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="7"/>
-          <circle cx="40" cy="40" r="34" fill="none" stroke="${scoreCol}" stroke-width="7"
-            stroke-dasharray="${circumference}" stroke-dashoffset="${offset}"
-            stroke-linecap="round" style="transition:stroke-dashoffset 0.8s ease"/>
-        </svg>
-        <div class="score-ring-value">
-          <span class="score-number" style="color:${scoreCol}">${score}</span>
-          <span class="score-label">/ 100</span>
-        </div>
-      </div>
-      <div class="score-info">
-        <h3>${score >= 80 ? '✓ Healthy' : score >= 50 ? '⚠ Needs Attention' : '✖ Critical Issues'}</h3>
-        <p>${escapeHtml(data.summary || '')}</p>
-      </div>
-      <div class="score-meta">
-        ${data.analyzedAt ? new Date(data.analyzedAt).toLocaleString() : ''}
-      </div>
-    </div>
-    ${issueGroupsHtml}
-    ${noIssuesHtml}
-    <div class="share-bar">
-      📎 Shareable link created —
-      <button onclick="copyShareLink()">Copy Link</button>
-    </div>
-  `;
-}
-
-function copyFix(btn, text) {
-  navigator.clipboard.writeText(text.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"'))
-    .then(() => { btn.textContent = 'Copied!'; setTimeout(() => btn.textContent = 'Copy', 1500); })
-    .catch(() => showToast('Copy failed — use manual selection'));
-}
-
-function copyShareLink() {
-  navigator.clipboard.writeText(window.location.href)
-    .then(() => showToast('Link copied to clipboard!'))
-    .catch(() => showToast('Could not copy link'));
-}
-
-function renderReports() {
-  if (reports.length === 0) return;
-
-  const totalCritical = reports.reduce((s, r) => s + (r.issues || []).filter(i => i.severity === 'CRITICAL').length, 0);
-  const totalHigh = reports.reduce((s, r) => s + (r.issues || []).filter(i => i.severity === 'HIGH').length, 0);
-  const avgScore = Math.round(reports.reduce((s, r) => s + (r.score || 0), 0) / reports.length);
-
-  document.getElementById('reportsStats').style.display = 'grid';
-  document.getElementById('statTotal').textContent = reports.length;
-  document.getElementById('statCritical').textContent = totalCritical;
-  document.getElementById('statHigh').textContent = totalHigh;
-  document.getElementById('statAvgScore').textContent = avgScore;
-
-  document.getElementById('reportsList').innerHTML = reports.map(r => {
-    const scoreCol = r.score >= 80 ? 'var(--primary)' : r.score >= 50 ? 'var(--high)' : 'var(--critical)';
-    const counts = { CRITICAL: 0, HIGH: 0 };
-    (r.issues || []).forEach(i => { if (counts[i.severity] !== undefined) counts[i.severity]++; });
-    return `
-      <div class="report-item" onclick="loadReport('${r.id}')">
-        <div class="report-score" style="background:${scoreCol}22;color:${scoreCol}">${r.score}</div>
-        <div class="report-meta">
-          <h4>${escapeHtml(r.configSnippet || 'Analysis')}…</h4>
-          <small>${new Date(r.id).toLocaleString()} · ${(r.issues||[]).length} issues
-            ${counts.CRITICAL ? ` · <span style="color:var(--critical)">${counts.CRITICAL} critical</span>` : ''}
-          </small>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function loadReport(id) {
-  const r = reports.find(x => x.id === Number(id));
-  if (!r) return;
-  showPage('analyzer');
-  renderResults(r);
-}
-
-// Load from hash if present (shared link)
-window.addEventListener('load', () => {
-  const hash = window.location.hash;
-  if (hash.startsWith('#report=')) {
-    try {
-      const data = JSON.parse(decodeURIComponent(escape(atob(hash.slice(8)))));
-      renderResults(data);
-    } catch { /* ignore malformed hash */ }
-  }
-});
+function escapeHtml(str){const d=document.createElement('div');d.textContent=String(str);return d.innerHTML}
+function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById('page-'+name).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));document.querySelectorAll('.nav-item').forEach(n=>{if(n.getAttribute('onclick')&&n.getAttribute('onclick').includes(name)){n.classList.add('active')}});if(name==='reports')renderReports()}
+function loadExample(){document.getElementById('config').value=['# MikroTik RouterOS v6.49.8 export','/ip firewall filter','add chain=input action=accept connection-state=established,related','add chain=input action=accept protocol=icmp','add chain=input action=accept dst-port=8291 protocol=tcp','add chain=input action=accept dst-port=22 protocol=tcp','/ip firewall nat','add chain=srcnat action=masquerade','add chain=srcnat action=masquerade out-interface=ether1','/ip dns','set allow-remote-requests=yes servers=8.8.8.8','/ip neighbor discovery-settings','set discover-interface-list=all','/ip upnp','set enabled=yes','/ip socks','set enabled=yes port=1080'].join('\n')}
+function clearEditor(){document.getElementById('config').value='';document.getElementById('results').innerHTML=''}
+function showToast(msg,duration=2500){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),duration)}
+async function analyze(){const config=document.getElementById('config').value.trim();if(!config){showToast('Please paste a config first');return}const btn=document.getElementById('analyzeBtn');const btnText=document.getElementById('btnText');btn.disabled=true;btnText.textContent='Analyzing...';document.getElementById('results').innerHTML=['<div class="skeleton skeleton-card"></div>','<div class="skeleton skeleton-card"></div>','<div class="skeleton skeleton-card" style="height:50px"></div>'].join('');try{const res=await fetch('/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({config})});if(res.status===429){document.getElementById('results').innerHTML=`<div class="card" style="color:var(--high);text-align:center;padding:30px">⚠️ Rate limit reached — max 10 analyses per minute. Please wait a moment.</div>`;return}if(!res.ok){const err=await res.json().catch(()=>({error:'Unknown error'}));document.getElementById('results').innerHTML=`<div class="card" style="color:var(--critical);text-align:center;padding:30px">✖ ${escapeHtml(err.error||'Analysis failed')}</div>`;return}const data=await res.json();renderResults(data,config);reports.unshift({...data,configSnippet:config.slice(0,80),id:Date.now()});const encoded=btoa(unescape(encodeURIComponent(JSON.stringify(data))));window.location.hash='report='+encoded}catch(err){document.getElementById('results').innerHTML=`<div class="card" style="color:var(--critical);text-align:center;padding:30px">✖ Network error — is the API reachable?</div>`}finally{btn.disabled=false;btnText.textContent='Analyze Config'}}
+function renderResults(data){const score=data.score??100;const scoreCol=score>=80?'var(--primary)':score>=50?'var(--high)':'var(--critical)';const circumference=2*Math.PI*34;const offset=circumference*(1-score/100);const grouped={CRITICAL:[],HIGH:[],MEDIUM:[],LOW:[]};(data.issues||[]).forEach(i=>(grouped[i.severity]||grouped.LOW).push(i));const issueGroupsHtml=Object.entries(grouped).filter(([,items])=>items.length>0).map(([sev,items])=>`<details class="issue-group" open><summary><span class="badge badge-${sev.toLowerCase()}">${sev}</span><span style="color:var(--text);margin-left:4px">${items.length} issue${items.length>1?'s':''}</span><svg class="group-chevron" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 4l4 4-4 4"/></svg></summary>${items.map(i=>`<div class="issue-card"><div class="issue-message">${escapeHtml(i.message)}${i.source==='ai'?'<span class="source-ai">✦ AI</span>':''}</div><div class="issue-impact">${escapeHtml(i.impact)}</div><div class="issue-fix-label">Recommended Fix</div><div class="issue-fix"><code>${escapeHtml(i.fix)}</code><button class="copy-btn" onclick="copyFix(this, ${JSON.stringify(escapeHtml(i.fix)).replace(/"/g,'&quot;')})">Copy</button></div></div>`).join('')}</details>`).join('');const noIssues=(data.issues||[]).length===0;const noIssuesHtml=noIssues?`<div class="empty-state"><div class="empty-icon">✅</div><h3>No issues detected!</h3><p>Your config passed all checks. Good work.</p></div>`:'';document.getElementById('results').innerHTML=`<div class="score-section"><div class="score-ring"><svg width="80" height="80" viewBox="0 0 80 80"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="7"/><circle cx="40" cy="40" r="34" fill="none" stroke="${scoreCol}" stroke-width="7" stroke-dasharray="${circumference}" stroke-dashoffset="${offset}" stroke-linecap="round" style="transition:stroke-dashoffset 0.8s ease"/></svg><div class="score-ring-value"><span class="score-number" style="color:${scoreCol}">${score}</span><span class="score-label">/ 100</span></div></div><div class="score-info"><h3>${score>=80?'✓ Healthy':score>=50?'⚠ Needs Attention':'✖ Critical Issues'}</h3><p>${escapeHtml(data.summary||'')}</p></div><div class="score-meta">${data.analyzedAt?new Date(data.analyzedAt).toLocaleString():''}</div></div>${issueGroupsHtml}${noIssuesHtml}<div class="share-bar">📎 Shareable link created —<button onclick="copyShareLink()">Copy Link</button></div>`}
+function copyFix(btn,text){navigator.clipboard.writeText(text.replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"')).then(()=>{btn.textContent='Copied!';setTimeout(()=>btn.textContent='Copy',1500)}).catch(()=>showToast('Copy failed — use manual selection'))}
+function copyShareLink(){navigator.clipboard.writeText(window.location.href).then(()=>showToast('Link copied to clipboard!')).catch(()=>showToast('Could not copy link'))}
+function renderReports(){if(reports.length===0)return;const totalCritical=reports.reduce((s,r)=>s+(r.issues||[]).filter(i=>i.severity==='CRITICAL').length,0);const totalHigh=reports.reduce((s,r)=>s+(r.issues||[]).filter(i=>i.severity==='HIGH').length,0);const avgScore=Math.round(reports.reduce((s,r)=>s+(r.score||0),0)/reports.length);document.getElementById('reportsStats').style.display='grid';document.getElementById('statTotal').textContent=reports.length;document.getElementById('statCritical').textContent=totalCritical;document.getElementById('statHigh').textContent=totalHigh;document.getElementById('statAvgScore').textContent=avgScore;document.getElementById('reportsList').innerHTML=reports.map(r=>{const scoreCol=r.score>=80?'var(--primary)':r.score>=50?'var(--high)':'var(--critical)';const counts={CRITICAL:0,HIGH:0};(r.issues||[]).forEach(i=>{if(counts[i.severity]!==undefined)counts[i.severity]++});return `<div class="report-item" onclick="loadReport('${r.id}')"><div class="report-score" style="background:${scoreCol}22;color:${scoreCol}">${r.score}</div><div class="report-meta"><h4>${escapeHtml(r.configSnippet||'Analysis')}…</h4><small>${new Date(r.id).toLocaleString()} · ${(r.issues||[]).length} issues${counts.CRITICAL?` · <span style="color:var(--critical)">${counts.CRITICAL} critical</span>`:''}</small></div></div>`}).join('')}
+function loadReport(id){const r=reports.find(x=>x.id===Number(id));if(!r)return;showPage('analyzer');renderResults(r)}
+window.addEventListener('load',()=>{const hash=window.location.hash;if(hash.startsWith('#report=')){try{const data=JSON.parse(decodeURIComponent(escape(atob(hash.slice(8)))));renderResults(data)}catch{}}})
 </script>
 </body>
 </html>
