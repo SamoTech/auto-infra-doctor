@@ -35,6 +35,25 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Close all previous audit issues
+        run: |
+          echo "Closing stale audit issues..."
+          ISSUE_NUMBERS=$(gh issue list \
+            --label "ai-audit" \
+            --state open \
+            --json number \
+            --jq '.[].number')
+          if [ -n "$ISSUE_NUMBERS" ]; then
+            for num in $ISSUE_NUMBERS; do
+              echo "Closing issue #$num"
+              gh issue close "$num" --comment "🔄 Superseded by a new audit run. Closing to keep the tracker clean." --reason "not planned"
+            done
+          else
+            echo "No open audit issues to close."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Run static audit
         id: audit
         run: |
@@ -141,11 +160,12 @@ jobs:
 
           cat audit-report.md
 
-      - name: Create or update audit issue
-        uses: peter-evans/create-issue-from-file@v5
-        with:
-          title: "🤖 Automated AI Audit Report"
-          content-filepath: ./audit-report.md
-          labels: ai-audit, automated
-          update-existing: true
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create new audit issue
+        run: |
+          BODY=$(cat audit-report.md)
+          gh issue create \
+            --title "🤖 Automated AI Audit Report" \
+            --body "$BODY" \
+            --label "ai-audit,automated"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
